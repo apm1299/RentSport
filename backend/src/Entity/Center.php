@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CenterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CenterRepository::class)]
+#[ApiResource]
 class Center
 {
     #[ORM\Id]
@@ -26,6 +28,9 @@ class Center
 
     #[ORM\OneToMany(mappedBy: 'center', targetEntity: User::class)]
     private $userAdmin;
+
+    #[ORM\ManyToOne(targetEntity: Installation::class, inversedBy: 'center')]
+    private $installation;
 
     public function __construct()
     {
@@ -99,6 +104,18 @@ class Center
                 $userAdmin->setCenter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getInstallation(): ?Installation
+    {
+        return $this->installation;
+    }
+
+    public function setInstallation(?Installation $installation): self
+    {
+        $this->installation = $installation;
 
         return $this;
     }
