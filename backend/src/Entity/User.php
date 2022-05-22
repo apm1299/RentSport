@@ -39,6 +39,9 @@ class User
     #[ORM\ManyToMany(targetEntity: UserRole::class, inversedBy: 'users')]
     private $userRoles;
 
+    #[ORM\ManyToOne(targetEntity: Center::class, inversedBy: 'userAdmin')]
+    private $center;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
@@ -141,6 +144,18 @@ class User
     public function removeUserRole(UserRole $userRole): self
     {
         $this->userRoles->removeElement($userRole);
+
+        return $this;
+    }
+
+    public function getCenter(): ?Center
+    {
+        return $this->center;
+    }
+
+    public function setCenter(?Center $center): self
+    {
+        $this->center = $center;
 
         return $this;
     }
