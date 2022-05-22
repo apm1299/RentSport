@@ -29,6 +29,9 @@ class Installation
     #[ORM\OneToMany(mappedBy: 'installation', targetEntity: Center::class)]
     private $center;
 
+    #[ORM\ManyToOne(targetEntity: Rental::class, inversedBy: 'Installation')]
+    private $rental;
+
     public function __construct()
     {
         $this->center = new ArrayCollection();
@@ -101,6 +104,18 @@ class Installation
                 $center->setInstallation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRental(): ?Rental
+    {
+        return $this->rental;
+    }
+
+    public function setRental(?Rental $rental): self
+    {
+        $this->rental = $rental;
 
         return $this;
     }

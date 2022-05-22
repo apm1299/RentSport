@@ -18,6 +18,9 @@ class RentalType
     #[ORM\Column(type: 'string', length: 40)]
     private $name;
 
+    #[ORM\ManyToOne(targetEntity: Rental::class, inversedBy: 'type')]
+    private $rental;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +34,18 @@ class RentalType
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getRental(): ?Rental
+    {
+        return $this->rental;
+    }
+
+    public function setRental(?Rental $rental): self
+    {
+        $this->rental = $rental;
 
         return $this;
     }
