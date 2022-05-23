@@ -42,7 +42,7 @@ class User
     #[ORM\ManyToOne(targetEntity: Center::class, inversedBy: 'userAdmin')]
     private $center;
 
-    #[ORM\ManyToOne(targetEntity: Rental::class, inversedBy: 'lessor')]
+    #[ORM\OneToMany(mappedBy: 'lessor', targetEntity: Rental::class)]
     private $rental;
 
     public function __construct()

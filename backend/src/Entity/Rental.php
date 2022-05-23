@@ -20,23 +20,23 @@ class Rental
     #[ORM\Column(type: 'datetime')]
     private $date;
 
-    #[ORM\OneToMany(mappedBy: 'rental', targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rental')]
     private $lessor;
 
-    #[ORM\OneToMany(mappedBy: 'rental', targetEntity: Sport::class)]
+    #[ORM\ManyToOne(targetEntity: Sport::class, inversedBy: 'rental')]
     private $sport;
 
-    #[ORM\OneToMany(mappedBy: 'rental', targetEntity: Installation::class)]
-    private $Installation;
+    #[ORM\ManyToOne(targetEntity: Installation::class, inversedBy: 'rental')]
+    private $installation;
 
-    #[ORM\OneToMany(mappedBy: 'rental', targetEntity: RentalType::class)]
+    #[ORM\ManyToOne(targetEntity: RentalType::class, inversedBy: 'rental')]
     private $type;
 
     public function __construct()
     {
         $this->lessor = new ArrayCollection();
         $this->sport = new ArrayCollection();
-        $this->Installation = new ArrayCollection();
+        $this->installation = new ArrayCollection();
         $this->type = new ArrayCollection();
     }
 
@@ -122,13 +122,13 @@ class Rental
      */
     public function getInstallation(): Collection
     {
-        return $this->Installation;
+        return $this->installation;
     }
 
     public function addInstallation(Installation $installation): self
     {
-        if (!$this->Installation->contains($installation)) {
-            $this->Installation[] = $installation;
+        if (!$this->installation->contains($installation)) {
+            $this->installation[] = $installation;
             $installation->setRental($this);
         }
 
@@ -137,7 +137,7 @@ class Rental
 
     public function removeInstallation(Installation $installation): self
     {
-        if ($this->Installation->removeElement($installation)) {
+        if ($this->installation->removeElement($installation)) {
             // set the owning side to null (unless already changed)
             if ($installation->getRental() === $this) {
                 $installation->setRental(null);

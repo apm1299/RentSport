@@ -29,7 +29,7 @@ class Installation
     #[ORM\OneToMany(mappedBy: 'installation', targetEntity: Center::class)]
     private $center;
 
-    #[ORM\ManyToOne(targetEntity: Rental::class, inversedBy: 'Installation')]
+    #[ORM\OneToMany(mappedBy: 'installation', targetEntity: Rental::class)]
     private $rental;
 
     public function __construct()

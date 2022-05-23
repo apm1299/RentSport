@@ -18,7 +18,7 @@ class RentalType
     #[ORM\Column(type: 'string', length: 40)]
     private $name;
 
-    #[ORM\ManyToOne(targetEntity: Rental::class, inversedBy: 'type')]
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Rental::class)]
     private $rental;
 
     public function getId(): ?int
