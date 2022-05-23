@@ -26,7 +26,7 @@ class Center
     #[ORM\Column(type: 'string', length: 40)]
     private $province;
 
-    #[ORM\OneToMany(mappedBy: 'center', targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'center')]
     private $userAdmin;
 
     #[ORM\ManyToOne(targetEntity: Installation::class, inversedBy: 'center')]

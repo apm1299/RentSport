@@ -39,7 +39,7 @@ class User
     #[ORM\ManyToMany(targetEntity: UserRole::class, inversedBy: 'users')]
     private $userRoles;
 
-    #[ORM\ManyToOne(targetEntity: Center::class, inversedBy: 'userAdmin')]
+    #[ORM\OneToMany(mappedBy: 'userAdmin', targetEntity: Center::class)]
     private $center;
 
     #[ORM\OneToMany(mappedBy: 'lessor', targetEntity: Rental::class)]
