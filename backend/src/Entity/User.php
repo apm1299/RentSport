@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource]
-class User
+class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -37,17 +37,20 @@ class User
     private $image;
 
     #[ORM\ManyToMany(targetEntity: UserRole::class, inversedBy: 'users')]
+    #[ORM\JoinTable(name: "users_roles_rel")]
     private $userRoles;
 
-    #[ORM\OneToMany(mappedBy: 'userAdmin', targetEntity: Center::class)]
+    #[ORM\OneToOne(mappedBy: 'userAdmin', targetEntity: Center::class, cascade: ['persist', 'remove'])]
     private $center;
 
     #[ORM\OneToMany(mappedBy: 'lessor', targetEntity: Rental::class)]
-    private $rental;
+    private $rentals;
+
 
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
+        $this->rentals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,22 +159,47 @@ class User
         return $this->center;
     }
 
-    public function setCenter(?Center $center): self
+    public function setCenter(Center $center): self
     {
+        // set the owning side of the relation if necessary
+        if ($center->getUserAdmin() !== $this) {
+            $center->setUserAdmin($this);
+        }
+
         $this->center = $center;
 
         return $this;
     }
 
-    public function getRental(): ?Rental
+    /**
+     * @return Collection<int, Rental>
+     */
+    public function getRentals(): Collection
     {
-        return $this->rental;
+        return $this->rentals;
     }
 
-    public function setRental(?Rental $rental): self
+    public function addRental(Rental $rental): self
     {
-        $this->rental = $rental;
+        if (!$this->rentals->contains($rental)) {
+            $this->rentals[] = $rental;
+            $rental->setLessor($this);
+        }
 
         return $this;
     }
+
+    public function removeRental(Rental $rental): self
+    {
+        if ($this->rentals->removeElement($rental)) {
+            // set the owning side to null (unless already changed)
+            if ($rental->getLessor() === $this) {
+                $rental->setLessor(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

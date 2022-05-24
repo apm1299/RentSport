@@ -26,15 +26,15 @@ class Installation
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private $pricePerRange;
 
-    #[ORM\OneToMany(mappedBy: 'installation', targetEntity: Center::class)]
+    #[ORM\ManyToOne(targetEntity: center::class, inversedBy: 'installations')]
     private $center;
 
     #[ORM\OneToMany(mappedBy: 'installation', targetEntity: Rental::class)]
-    private $rental;
+    private $rentals;
 
     public function __construct()
     {
-        $this->center = new ArrayCollection();
+        $this->rentals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,44 +78,44 @@ class Installation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Center>
-     */
-    public function getCenter(): Collection
+    public function getCenter(): ?center
     {
         return $this->center;
     }
 
-    public function addCenter(Center $center): self
+    public function setCenter(?center $center): self
     {
-        if (!$this->center->contains($center)) {
-            $this->center[] = $center;
-            $center->setInstallation($this);
+        $this->center = $center;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rental>
+     */
+    public function getRentals(): Collection
+    {
+        return $this->rentals;
+    }
+
+    public function addRental(Rental $rental): self
+    {
+        if (!$this->rentals->contains($rental)) {
+            $this->rentals[] = $rental;
+            $rental->setInstallation($this);
         }
 
         return $this;
     }
 
-    public function removeCenter(Center $center): self
+    public function removeRental(Rental $rental): self
     {
-        if ($this->center->removeElement($center)) {
+        if ($this->rentals->removeElement($rental)) {
             // set the owning side to null (unless already changed)
-            if ($center->getInstallation() === $this) {
-                $center->setInstallation(null);
+            if ($rental->getInstallation() === $this) {
+                $rental->setInstallation(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getRental(): ?Rental
-    {
-        return $this->rental;
-    }
-
-    public function setRental(?Rental $rental): self
-    {
-        $this->rental = $rental;
 
         return $this;
     }

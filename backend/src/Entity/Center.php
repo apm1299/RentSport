@@ -26,15 +26,16 @@ class Center
     #[ORM\Column(type: 'string', length: 40)]
     private $province;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'center')]
+    #[ORM\OneToOne(inversedBy: 'center', targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private $userAdmin;
 
-    #[ORM\ManyToOne(targetEntity: Installation::class, inversedBy: 'center')]
-    private $installation;
+    #[ORM\OneToMany(mappedBy: 'center', targetEntity: Installation::class)]
+    private $installations;
 
     public function __construct()
     {
-        $this->userAdmin = new ArrayCollection();
+        $this->installations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,44 +79,44 @@ class Center
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUserAdmin(): Collection
+    public function getUserAdmin(): ?User
     {
         return $this->userAdmin;
     }
 
-    public function addUserAdmin(User $userAdmin): self
+    public function setUserAdmin(User $userAdmin): self
     {
-        if (!$this->userAdmin->contains($userAdmin)) {
-            $this->userAdmin[] = $userAdmin;
-            $userAdmin->setCenter($this);
+        $this->userAdmin = $userAdmin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Installation>
+     */
+    public function getInstallations(): Collection
+    {
+        return $this->installations;
+    }
+
+    public function addInstallation(Installation $installation): self
+    {
+        if (!$this->installations->contains($installation)) {
+            $this->installations[] = $installation;
+            $installation->setCenter($this);
         }
 
         return $this;
     }
 
-    public function removeUserAdmin(User $userAdmin): self
+    public function removeInstallation(Installation $installation): self
     {
-        if ($this->userAdmin->removeElement($userAdmin)) {
+        if ($this->installations->removeElement($installation)) {
             // set the owning side to null (unless already changed)
-            if ($userAdmin->getCenter() === $this) {
-                $userAdmin->setCenter(null);
+            if ($installation->getCenter() === $this) {
+                $installation->setCenter(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getInstallation(): ?Installation
-    {
-        return $this->installation;
-    }
-
-    public function setInstallation(?Installation $installation): self
-    {
-        $this->installation = $installation;
 
         return $this;
     }

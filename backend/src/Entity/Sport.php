@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SportRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SportRepository::class)]
@@ -19,7 +21,12 @@ class Sport
     private $name;
 
     #[ORM\OneToMany(mappedBy: 'sport', targetEntity: Rental::class)]
-    private $rental;
+    private $rentals;
+
+    public function __construct()
+    {
+        $this->rentals = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -38,15 +45,34 @@ class Sport
         return $this;
     }
 
-    public function getRental(): ?Rental
+    /**
+     * @return Collection<int, Rental>
+     */
+    public function getRentals(): Collection
     {
-        return $this->rental;
+        return $this->rentals;
     }
 
-    public function setRental(?Rental $rental): self
+    public function addRental(Rental $rental): self
     {
-        $this->rental = $rental;
+        if (!$this->rentals->contains($rental)) {
+            $this->rentals[] = $rental;
+            $rental->setSport($this);
+        }
 
         return $this;
     }
+
+    public function removeRental(Rental $rental): self
+    {
+        if ($this->rentals->removeElement($rental)) {
+            // set the owning side to null (unless already changed)
+            if ($rental->getSport() === $this) {
+                $rental->setSport(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
