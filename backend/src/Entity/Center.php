@@ -2,32 +2,47 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\CenterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ORM\Table(name: "center")]
 #[ORM\Entity(repositoryClass: CenterRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['center:read']],
+    denormalizationContext: ['groups' => ['center:write']],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
 class Center
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', unique:true)]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['center:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
+    #[Groups(['center:read', 'center:write'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 40)]
+    #[Groups(['center:read', 'center:write'])]
     private $locality;
 
     #[ORM\Column(type: 'string', length: 40)]
+    #[Groups(['center:read', 'center:write'])]
     private $province;
 
     #[ORM\OneToOne(inversedBy: 'center', targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['center:read'])]
     private $userAdmin;
 
     #[ORM\OneToMany(mappedBy: 'center', targetEntity: Installation::class)]
