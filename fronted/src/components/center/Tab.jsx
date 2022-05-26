@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { Calendar } from "react-calendar";
 import styled from 'styled-components';
-import { getSports } from '../../../services/useSport';
+import { getSports } from '../../services/useSport';
 
 const CalendarContainer = styled.div`
 /* ~~~ container styles ~~~ */
@@ -20,7 +20,7 @@ border-radius: 3px;
   }
 
   .react-calendar__navigation__arrow {
-    flex-grow: 0.333;
+    flex-grow: 0.433;
   }
 }
     /* ~~~ label styles ~~~ */
@@ -30,21 +30,25 @@ border-radius: 3px;
   /* ~~~ button styles ~~~ */
   button {
     margin: 3px;
-    background-color: #194473;
+    background-color: #50336b;
     border: 0;
-    border-radius: 3px;
-    color: white;
+    font-weight: bold;
+    border-radius: 22px;
+    color: #ffb133;
     padding: 5px 0;
 
     &:hover {
-      background-color: #47698f;
+      background-color: #7c6690;
+      color: #ff9e00;
     }
 
     &:active {
-      background-color: #0f2945;
+      background-color: #ffb133;
+      color: #50336b;
     }
     button:focus {
-        background-color: #0f2945;
+        background-color: #ffb133;
+        color: #50336b;
     }
   }
   /* ~~~ day grid styles ~~~ */
@@ -58,17 +62,17 @@ border-radius: 3px;
   }
   /* ~~~ active day styles ~~~ */
   .react-calendar__tile--range {
-      box-shadow: 0 0 6px 2px black;
-      background-color: #14365c;
-
+      box-shadow: 0 0 14px 2px black;
+      background-color: #ffb133;
+      color: #50336b;
   }
+
   /* ~~~ neighboring month & weekend styles ~~~ */
   .react-calendar__month-view__days__day--neighboringMonth {
-    opacity: 0.7;
+    opacity: 0.6;
   }
   .react-calendar__month-view__days__day--weekend {
-    color: #dfdfdf;
-
+    color: #ffb133;
   }
 `;
 
@@ -85,7 +89,7 @@ export const MyTab = () => {
   return (
     <>
       <Tab.Group>
-        <Tab.List className={'w-8/12 mx-auto mt-4'}>
+        <Tab.List className={'w-6/12 mx-auto mt-4'}>
           <Tab className={({ selected }) =>
             selected ? 'w-6/12 bg-logo-500 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl' : 'w-6/12 bg-logo-400 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl'}>
             Alquilar
@@ -98,14 +102,12 @@ export const MyTab = () => {
         <Tab.Panels>
           <Tab.Panel>
             <div>
-              <div className='flex pt-6'>
-                <div className='w-6/12'>
+              <div className='pt-6 w-10/12 mx-auto'>
                   <h1 className='text-center font-bold text-xl'>Calendario</h1>
                   <CalendarContainer>
                     <Calendar />
                   </CalendarContainer>
-                </div>
-                <div className='w-5/12'>
+                <div className='pt-6 w-10/12 mx-auto'>
                   <h1 className='text-center font-bold text-xl'>SELECT DEPORTES</h1>
                   {
                     sports.length > 0
@@ -123,7 +125,6 @@ export const MyTab = () => {
                         </div>
                       )
                   }
-
                 </div>
               </div>
               <div>

@@ -1,38 +1,83 @@
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import useDebounce from "./useDebounce"
 
-export async function getCenters(search='') {
+export const useCenter = () => {
+    const [searchCenter, setSearch] = useState('');
+    const debounce = useDebounce(searchCenter, 300)
+    const [centers, setCenters] = useState([]);
+    const [center, setCenter] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
-    let centers = [];
-    let headers = new Headers();
-    headers.set("Accept", "application/ld+json");
-    headers.set("Content-Type", "application/ld+json")
-    await global.fetch(`http://localhost:8000/api/centers${search ? `?name=${search}` : ''}`, {
-        method: 'GET',
-        headers,
-        credentials: 'include',
-    }).then(response => response.json()
-    .then(async retrieved => {
-        centers = await retrieved['hydra:member'];
-        console.log(retrieved);
-    }))
-    .catch(error => console.error(error))
+    const { id } = useParams();
 
-    return centers;
-}
+    useEffect(() => {
+        const callToGetCenters = async () => {
+            setCenters(await getCenters());
+        }
+        callToGetCenters();
+    }, []);
+    useEffect(() => {
+        if (debounce !== undefined) {
+            const callToGetCenters = async () => {
+                setCenters(await getCenters(debounce));
+            }
+            callToGetCenters();
+        }
+    }, [debounce]);
+    useEffect(() => {
+        setLoading(true);        
+        const callToGetCenter = async () => {
+            setCenter(await getCenter(id));
+            setLoading(false);        
+        }
+        callToGetCenter();
+    }, [id]);
 
-export async function getCenter(id) {
-    let center = null;
-    let headers = new Headers();
-    headers.set("Accept", "application/ld+json");
-    headers.set("Content-Type", "application/ld+json")
-    await global.fetch(`http://localhost:8000/api/centers/${id}`, {
-        method: 'GET',
-        headers,
-        credentials: 'include',
-    }).then(response => response.json()
-    .then(async retrieved => {
-        center = await retrieved;
-        console.log(retrieved);
-    }))
-    .catch(error => console.error(error))
-    return center;
+    async function getCenters(search = '') {
+
+        let centers = [];
+        let headers = new Headers();
+        headers.set("Accept", "application/ld+json");
+        headers.set("Content-Type", "application/ld+json")
+        await global.fetch(`http://localhost:8000/api/centers${search ? `?name=${search}` : ''}`, {
+            method: 'GET',
+            headers,
+            credentials: 'include',
+        }).then(response => response.json()
+            .then(async retrieved => {
+                centers = await retrieved['hydra:member'];
+                console.log(retrieved);
+            }))
+            .catch(error => console.error(error))
+
+        return centers;
+    }
+
+    async function getCenter(id) {
+        let center = null;
+        let headers = new Headers();
+        headers.set("Accept", "application/ld+json");
+        headers.set("Content-Type", "application/ld+json")
+        await global.fetch(`http://localhost:8000/api/centers/${id}`, {
+            method: 'GET',
+            headers,
+            credentials: 'include',
+        }).then(response => response.json()
+            .then(async retrieved => {
+                center = await retrieved;
+                console.log(retrieved);
+            }))
+            .catch(error => console.error(error))
+        return center;
+    }
+
+
+    return {
+        getCenter,
+        setSearch,
+        centers,
+        center,
+        isLoading,
+    }
 }
