@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Tab } from '@headlessui/react'
 import { Calendar } from "react-calendar";
 import styled from 'styled-components';
-import { getSports } from '../../services/useSport';
+import { useSport } from '../../services/useSport';
 
 const CalendarContainer = styled.div`
 /* ~~~ container styles ~~~ */
@@ -76,16 +76,22 @@ border-radius: 3px;
   }
 `;
 
-export const MyTab = () => {
-  const [sports, setSport] = useState([]);
+export const MyTab = ({
+  id,
+}) => {
+  const{
+    getSportsCenter,
+    setSports,
+    sports,
+} = useSport()
 
-  useEffect(() => {
-    const callToGetSport = async () => {
-      setSport(await getSports());
-    }
-    callToGetSport();
+useEffect(() => {
+  const callToGetCenter = async () => {
+    setSports(await getSportsCenter(id));
+  }
+  callToGetCenter();
+}, [id]);
 
-  }, []);
   return (
     <>
       <Tab.Group>
@@ -108,7 +114,7 @@ export const MyTab = () => {
                     <Calendar />
                   </CalendarContainer>
                 <div className='pt-6 w-10/12 mx-auto'>
-                  <h1 className='text-center font-bold text-xl'>SELECT DEPORTES</h1>
+                  <h1 className='text-center font-bold text-xl'>SELECT INSTALACIONES</h1>
                   {
                     sports.length > 0
                       ? (

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
 import useDebounce from "./useDebounce"
 
 export const useCenter = () => {
@@ -8,8 +7,6 @@ export const useCenter = () => {
     const [centers, setCenters] = useState([]);
     const [center, setCenter] = useState([]);
     const [isLoading, setLoading] = useState(false);
-
-    const { id } = useParams();
 
     useEffect(() => {
         const callToGetCenters = async () => {
@@ -25,14 +22,7 @@ export const useCenter = () => {
             callToGetCenters();
         }
     }, [debounce]);
-    useEffect(() => {
-        setLoading(true);        
-        const callToGetCenter = async () => {
-            setCenter(await getCenter(id));
-            setLoading(false);        
-        }
-        callToGetCenter();
-    }, [id]);
+
 
     async function getCenters(search = '') {
 
@@ -79,5 +69,7 @@ export const useCenter = () => {
         centers,
         center,
         isLoading,
+        setLoading,
+        setCenter,
     }
 }

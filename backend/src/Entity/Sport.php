@@ -23,9 +23,13 @@ class Sport
     #[ORM\OneToMany(mappedBy: 'sport', targetEntity: Rental::class)]
     private $rentals;
 
+    #[ORM\ManyToMany(targetEntity: Installation::class, inversedBy: 'sports')]
+    private $installations;
+
     public function __construct()
     {
         $this->rentals = new ArrayCollection();
+        $this->installations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -71,6 +75,30 @@ class Sport
                 $rental->setSport(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Installation>
+     */
+    public function getInstallations(): Collection
+    {
+        return $this->installations;
+    }
+
+    public function addInstallation(Installation $installation): self
+    {
+        if (!$this->installations->contains($installation)) {
+            $this->installations[] = $installation;
+        }
+
+        return $this;
+    }
+
+    public function removeInstallation(Installation $installation): self
+    {
+        $this->installations->removeElement($installation);
 
         return $this;
     }

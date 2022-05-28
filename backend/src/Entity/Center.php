@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\CenterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -46,6 +47,7 @@ class Center
     private $userAdmin;
 
     #[ORM\OneToMany(mappedBy: 'center', targetEntity: Installation::class)]
+    #[ApiSubresource()]
     private $installations;
 
     public function __construct()

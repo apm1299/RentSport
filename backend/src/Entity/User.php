@@ -36,20 +36,18 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
     #[ORM\OneToOne(inversedBy: 'owner', targetEntity: UserImage::class, cascade: ['persist', 'remove'])]
     private $image;
 
-    #[ORM\ManyToMany(targetEntity: UserRole::class, inversedBy: 'users')]
-    #[ORM\JoinTable(name: "users_roles_rel")]
-    private $userRoles;
-
     #[ORM\OneToOne(mappedBy: 'userAdmin', targetEntity: Center::class, cascade: ['persist', 'remove'])]
     private $center;
 
     #[ORM\OneToMany(mappedBy: 'lessor', targetEntity: Rental::class)]
     private $rentals;
 
+    #[ORM\ManyToOne(targetEntity: UserRole::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $rol;
 
     public function __construct()
     {
-        $this->userRoles = new ArrayCollection();
         $this->rentals = new ArrayCollection();
     }
 
@@ -130,30 +128,6 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserRole>
-     */
-    public function getUserRoles(): Collection
-    {
-        return $this->userRoles;
-    }
-
-    public function addUserRole(UserRole $userRole): self
-    {
-        if (!$this->userRoles->contains($userRole)) {
-            $this->userRoles[] = $userRole;
-        }
-
-        return $this;
-    }
-
-    public function removeUserRole(UserRole $userRole): self
-    {
-        $this->userRoles->removeElement($userRole);
-
-        return $this;
-    }
-
     public function getCenter(): ?Center
     {
         return $this->center;
@@ -201,5 +175,16 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         return $this;
     }
 
+    public function getRol(): ?UserRole
+    {
+        return $this->rol;
+    }
+
+    public function setRol(?UserRole $rol): self
+    {
+        $this->rol = $rol;
+
+        return $this;
+    }
 
 }

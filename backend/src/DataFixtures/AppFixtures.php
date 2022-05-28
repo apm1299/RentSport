@@ -39,33 +39,33 @@ class AppFixtures extends Fixture
             'surnames' => 'Guardiola Lopez',
             'email' => 'pep@gmail.com',
             'emailVerify' => true,
-            'userRoles' => [$superAdmin]
+            'rol' => $superAdmin,
         ]);
         $cholo = UserFactory::new()->create([
             'name' => 'Cholo',
             'surnames' => 'Simeone',
             'email' => 'cholo@gmail.com',
             'emailVerify' => true,
-            'userRoles' => [$admin]
+            'rol' => $admin,
         ]);
         $chola = UserFactory::new()->create([
             'name' => 'Chola',
             'surnames' => 'Simeona',
             'email' => 'chola@gmail.com',
             'emailVerify' => true,
-            'userRoles' => [$admin]
+            'rol' => $admin,
         ]);
         $jose = UserFactory::new()->create([
             'name' => 'Jose',
             'surnames' => 'Mourinho Felix',
             'email' => 'maria@gmail.com',
             'emailVerify' => true,
-            'userRoles' => [$user],
+            'rol' => $user,
         ]);
 
         //CREACION DE USUARIOS Y TABLA N:M
         UserFactory::createMany(10, function()  use ($admin, $user) {
-            $item['userRoles'] = [$user];
+            $item['rol'] = $user;
 
             return $item;
         });
@@ -89,24 +89,10 @@ class AppFixtures extends Fixture
         CenterFactory::createMany(3, function()  use ($admin) {
             $item['userAdmin'] = UserFactory::new()->create([
                 'emailVerify' => true,
-                'userRoles' => [$admin]
+                'rol' => $admin
             ]);
             return $item;
         });
-
-        //CREACION DE DEPORTES MANUALES
-        $futbol = SportFactory::new()->create([
-            'name' => 'Futbol',
-        ]);
-        $tenis = SportFactory::new()->create([
-            'name' => 'Tenis',
-        ]);
-        $padel = SportFactory::new()->create([
-            'name' => 'Padel',
-        ]);
-        $baloncesto = SportFactory::new()->create([
-            'name' => 'Baloncesto',
-        ]);
 
         //CREACION DE TIPOS DE ALQUILER MANUALES
         $normal = RentalTypeFactory::new()->create([
@@ -121,35 +107,55 @@ class AppFixtures extends Fixture
             'name' => 'Pabellon',
             'center' => $ayunVillacarrillo,
         ]);
-        $pistaTenis = InstallationFactory::new()->create([
+        $pistaTenis1 = InstallationFactory::new()->create([
             'name' => 'Tenis 1',
             'center' => $ayunVillacarrillo,
         ]);
-        InstallationFactory::new()->create([
+        $pistaTenis2 = InstallationFactory::new()->create([
             'name' => 'Tenis 2',
             'center' => $ayunVillacarrillo,
         ]);
 
-        InstallationFactory::new()->create([
+        $padel1 = InstallationFactory::new()->create([
             'name' => 'Padel 1',
             'center' => $ayunLinares,
         ]);
-        InstallationFactory::new()->create([
+        $padel2 = InstallationFactory::new()->create([
             'name' => 'Padel 2',
             'center' => $ayunLinares,
         ]);
-        InstallationFactory::new()->create([
-            'name' => 'Padel 1',
+        $padel3 = InstallationFactory::new()->create([
+            'name' => 'Padel 3',
             'center' => $ayunLinares,
         ]);
-        InstallationFactory::new()->create([
+        $pistaTenis3 = InstallationFactory::new()->create([
             'name' => 'Tenis',
             'center' => $ayunLinares,
         ]);
-        InstallationFactory::new()->create([
+        $pabellon2 = InstallationFactory::new()->create([
             'name' => 'Pabellon',
             'center' => $ayunLinares,
         ]);
+
+
+        //CREACION DE DEPORTES MANUALES
+        $futbol = SportFactory::new()->create([
+            'name' => 'Futbol',
+            'installations' => [$pabellon,$pabellon2]
+        ]);
+        $tenis = SportFactory::new()->create([
+            'name' => 'Tenis',
+            'installations' => [$pistaTenis1, $pistaTenis2, $pistaTenis3]
+        ]);
+        $padel = SportFactory::new()->create([
+            'name' => 'Padel',
+            'installations' => [$padel1,$padel2,$padel3]
+        ]);
+        $baloncesto = SportFactory::new()->create([
+            'name' => 'Baloncesto',
+            'installations' => [$pabellon]
+        ]);
+
 
         //ALQUILERES MANUALES
         RentalFactory::new()->create([
@@ -167,7 +173,7 @@ class AppFixtures extends Fixture
         RentalFactory::new()->create([
             'sport' => $tenis,
             'lessor' => $jose,
-            'installation' => $pistaTenis,
+            'installation' => $pistaTenis1,
             'type' => $normal,
         ]);
 
