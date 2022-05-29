@@ -16,7 +16,7 @@ export const Login = () => {
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Identificate en tu cuenta de RentSport</h2>
             <p className="mt-2 text-center text-sm text-gray-600">
                 ¿No tienes cuenta?{' '}
-                <NavLink to='/register' className="font-medium text-indigo-600 hover:text-indigo-500">Registrate</NavLink>
+                <NavLink to='/registro' className="font-medium text-indigo-600 hover:text-indigo-500">Registrate</NavLink>
             </p>
         </div>
         <form className="mt-8 space-y-6" action="#" method="POST">

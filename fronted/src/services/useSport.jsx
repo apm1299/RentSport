@@ -4,7 +4,6 @@ import { useState } from "react";
 export const useSport = () => {
     const [sports, getSports] = useState([]);
 
-
     async function getSportCenter(idCenter) {
 
         let sports = [];

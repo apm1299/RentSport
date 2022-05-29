@@ -2,35 +2,49 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource]
-class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
+#[ApiResource(
+    normalizationContext: ['groups' => ['User:read']],
+    denormalizationContext: ['groups' => ['User:write']],
+)]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', unique:true)]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['User:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
+    #[Groups(['User:read', 'User:write'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[Groups(['User:read', 'User:write'])]
     private $surnames;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[Groups(['User:read', 'User:write'])]
     private $email;
 
     #[ORM\Column(type: 'boolean')]
-    private $emailVerify;
+    #[Groups(['User:read', 'User:write'])]
+    private $emailVerify = false;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['User:read', 'User:write'])]
     private $password;
 
     #[ORM\OneToOne(inversedBy: 'owner', targetEntity: UserImage::class, cascade: ['persist', 'remove'])]
@@ -44,6 +58,7 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
 
     #[ORM\ManyToOne(targetEntity: UserRole::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['User:read', 'User:write'])]
     private $rol;
 
     public function __construct()
@@ -104,6 +119,9 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         return $this;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -185,6 +203,32 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         $this->rol = $rol;
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getRoles(): array
+    {
+        $rol[] = 'ROLE_USER';
+
+        return $rol;
     }
 
 }

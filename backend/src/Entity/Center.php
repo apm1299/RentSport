@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['center:write']],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
+//#[ApiFilter(SearchFilter::class, properties: ['installations.id' => 'exact'])]
 class Center
 {
     #[ORM\Id]
