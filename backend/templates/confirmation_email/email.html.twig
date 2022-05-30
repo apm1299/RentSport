@@ -1,0 +1,28 @@
+<style>
+	a {
+		color: blue;
+	}
+
+	h4 {
+		color: darkblue;
+	}
+
+	img {
+		width: 50px;
+		height: 30px;
+	}
+</style>
+
+<h4>Bienvenido a RentSport
+</h4>
+<p>
+	Confirme su dirección de correo electrónico haciendo clic en el siguiente enlace:
+	<br><br>
+	<a href="{{ signedUrl|raw }}">Confirmación de correo electrónico</a><br>
+	Atención, el link expira en
+	{{ expiresAt|date('g') }}
+	hora(s).
+</p>
+<br>
+<p>Un saludo!</p>
+

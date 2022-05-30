@@ -107,17 +107,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isEmailVerify(): ?bool
+    /**
+     * @return mixed
+     */
+    public function getEmailVerify(): ?bool
     {
         return $this->emailVerify;
     }
 
-    public function setEmailVerify(bool $emailVerify): self
+    /**
+     * @param mixed $emailVerify
+     * @return User
+     */
+    public function setEmailVerify($emailVerify): self
     {
         $this->emailVerify = $emailVerify;
-
         return $this;
     }
+
 
     /**
      * @see PasswordAuthenticatedUserInterface

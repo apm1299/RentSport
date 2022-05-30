@@ -1,0 +1,25 @@
+<style>
+	a {
+		color: blue;
+	}
+
+	h1 {
+		color: darkblue;
+	}
+
+	img {
+		width: 50px;
+		height: 30px;
+	}
+</style>
+<h1>¡Hola!</h1>
+
+<p>Para restablecer su contraseña, visite el siguiente enlace</p>
+
+<a href="http://localhost:3000/auth/newPassword/{{ resetToken.token }}">http://localhost:3000/auth/newPassword/{{ resetToken.token }}</a>
+
+<p>Este enlace caducará en 15 minutos .</p>
+
+<p>¡Saludos!</p>
+
+
