@@ -1,25 +1,30 @@
 import React from 'react'
 import { NavLink } from "react-router-dom"
+import imgNotFound from "./norFound-recortado.png"
 
 export const NotFound = () => {
     return (
-        <div class="h-screen w-screen bg-gray-50 flex items-center">
-            <div class="container flex flex-col md:flex-row items-center justify-between px-5 text-gray-700">
-                <div class="w-full lg:w-1/2 mx-8">
-                    <div class="text-7xl text-green-500 font-dark font-extrabold mb-8"> 404</div>
-                    <p class="text-2xl md:text-3xl font-light leading-normal mb-8">
-                        Perdón, algo salió mal
+        <div
+            class="flex items-center justify-center w-screen min-h-screen bg-gradient-to-b from-hardpurple-400 via-hardpurple-200 to-hardpurple-400"
+        >
+            <div class=" py-20 bg-white rounded-md shadow-xl w-6/12">
+                <div class="flex flex-col items-center ">
+                    <div className='flex items-center w-6/12 mx-auto'>
+                        <img className='w-8/12' src={imgNotFound} alt="notFound" />
+                        <h1 class="font-bold text-logo-400 text-9xl">404</h1>
+                    </div>
+                    <h6 class="mb-2 text-2xl font-bold text-center text-gray-800 md:text-3xl">
+                        <span class="text-logo-400">Oops!</span> Página no encontrada
+                    </h6>
+                    <p class="mb-8 text-center text-gray-500 md:text-lg">
+                        La página que buscas no existe.
                     </p>
-                    <NavLink to='/' ><button
-                        type="button"
-                        className="px-5 inline py-3 text-sm font-medium leading-5 shadow-2xl text-white transition-all duration-400 border border-transparent rounded-lg focus:outline-none bg-green-600 active:bg-red-600 hover:bg-red-700"
-                    >
-                        Volver a la pagina principal
-                    </button>
-                    </NavLink>
-                </div>
-                <div class="w-full lg:flex lg:justify-end lg:w-1/2 mx-5 my-12">
-                    <img src="https://user-images.githubusercontent.com/43953425/166269493-acd08ccb-4df3-4474-95c7-ad1034d3c070.svg" class="" alt="Page not found"></img>
+
+                    <div className="flex flex-col w-full sm:flex-row xl:flex-col">
+                        <NavLink to='/' >
+                            <p className='w-2/12 text-center mx-auto px-6 py-2 text-sm font-semibold text-black bg-logo-100'>Volver a inicio</p>
+                        </NavLink>
+                    </div>
                 </div>
             </div>
         </div>
