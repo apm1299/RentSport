@@ -6,6 +6,8 @@ import { NotFoundPage } from './pages/notFoundPage/NotFoundPage';
 import { Layout } from "./components/home/layout/Layout";
 import { CenterPage } from "./pages/centerPage/CenterPage"
 import { RegisterPage } from './pages/register/RegisterPage'
+import { ProfilePage } from './pages/profilePage/ProfilePage'
+
 import './index.css';
 
 function App() {
@@ -15,6 +17,7 @@ function App() {
           <Route path='/' element={< Layout />}>
             <Route index element={< HomePage />}/>
             <Route path='/centro/:id' element={< CenterPage />}/>
+            <Route path='/perfil' element={< ProfilePage />}/>
           </Route>
           <Route path='/entrar' element={< LoginPage />}></Route>
           <Route path='/registro' element={< RegisterPage />}></Route>

@@ -4,6 +4,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'fade-in-down': {
+          '0%' : { opacity: '0', transform: 'translateX(400px)'},
+          '25%' : { opacity: '1', transform: 'translateX(0px)'},
+          '75%' : { opacity: '1', transform: 'translateX(0px)'},
+          '100%' : { opacity: '0', transform: 'translateX(400px)'},
+        }
+      },
+      animation: {
+        'fade-in-down': 'fade-in-down 4s ease-out'
+      },
       colors: {
         // logo: {
         //     100: "#d1d4da",

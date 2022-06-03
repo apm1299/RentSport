@@ -37,7 +37,6 @@ export const useCenter = () => {
         }).then(response => response.json()
             .then(async retrieved => {
                 centers = await retrieved['hydra:member'];
-                console.log(retrieved);
             }))
             .catch(error => console.error(error))
 

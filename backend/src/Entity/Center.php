@@ -138,4 +138,23 @@ class Center
 
         return $this;
     }
+
+    #[Groups(['center:read'])]
+    public function getSports():array
+    {
+        $sports = [];
+        $installations = $this->getInstallations();
+        foreach ($installations as $installation){
+            $installationSports = $installation->getSports();
+            foreach ($installationSports as $sport){
+                array_push($sports, [
+                    "id"=>$sport->getId(),
+                    "name"=>$sport->getName(),
+                ]);
+            }
+        }
+        $temp = array_unique(array_column($sports, 'id'));
+        return array_intersect_key($sports, $temp);
+    }
+
 }

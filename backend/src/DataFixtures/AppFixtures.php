@@ -118,15 +118,15 @@ class AppFixtures extends Fixture
 
         $padel1 = InstallationFactory::new()->create([
             'name' => 'Padel 1',
-            'center' => $ayunLinares,
+            'center' => $ayunVillacarrillo,
         ]);
         $padel2 = InstallationFactory::new()->create([
             'name' => 'Padel 2',
-            'center' => $ayunLinares,
+            'center' => $ayunVillacarrillo,
         ]);
         $padel3 = InstallationFactory::new()->create([
             'name' => 'Padel 3',
-            'center' => $ayunLinares,
+            'center' => $ayunVillacarrillo,
         ]);
         $pistaTenis3 = InstallationFactory::new()->create([
             'name' => 'Tenis',
