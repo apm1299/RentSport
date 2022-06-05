@@ -1,0 +1,28 @@
+[{"lunes": {"startAt": "10:00", "endAt": "11:00"}, "martes": {"startAt": "11:00", "endAt": "12:00"}}]
+
+
+
+
+
+
+[{"lunes": {"startAt": "10:00", "endAt": "11:00"},{"startAt": "11:00", "endAt": "12:00"},{"startAt": "12:00", "endAt": "13:00"},{"startAt": "13:00", "endAt": "14:00"}},{"martes": {"startAt": "11:00", "endAt": "12:00"},{"startAt": "12:00", "endAt": "13:00"}}]
+
+
+
+
+
+[{id: 1, value: {"startAt": "10:00", "endAt": "11:00"},{"startAt": "11:00", "endAt": "12:00"}},{id: 2, value: {"startAt": "10:00", "endAt": "11:00"},{"startAt": "11:00", "endAt": "12:00"}}]
+
+
+
+[{"lunes": {"rentTime": {"startAt": "10:00", "endAt": "11:00"},"rentTime": {"startAt": "11:00", "endAt": "12:00"},"rentTime": {"startAt": "12:00", "endAt": "13:00"},"rentTime": {"startAt": "13:00", "endAt": "14:00"}}},{"martes": {"rentTime": {"startAt": "10:00", "endAt": "11:00"},"rentTime": {"startAt": "11:00", "endAt": "12:00"}}}]
+
+
+
+
+
+
+
+
+
+

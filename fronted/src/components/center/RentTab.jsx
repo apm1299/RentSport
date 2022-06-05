@@ -194,11 +194,13 @@ export const RentTab = ({
                 <div className='pt-6 w-10/12 mx-auto'>
                     <h1 className='text-center font-bold text-xl'>HORAS DISPONIBLES</h1>
                     {
-                        installation && installation.rentals > 0
+                        installation
                         ? (
-                            'si'
+                            console.log(installation),
+                            'wi'
                         ):
                         (
+                            console.log(installation),
                             'no'
                         )
                     }
