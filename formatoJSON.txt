@@ -1,4 +1,4 @@
-[{"lunes": {"startAt": "10:00", "endAt": "11:00"}, "martes": {"startAt": "11:00", "endAt": "12:00"}}]
+[{"lunes": {"startAt": "10:00", "endAt": "11:00"},"lunes": {"startAt": "11:00", "endAt": "12:00"},"martes": {"startAt": "11:00", "endAt": "12:00"}}]
 
 
 
@@ -21,7 +21,27 @@
 
 
 
-
+{
+  "lunes": [
+    {
+      "id": "8931723",
+      "startAt": "10:00",
+      "endAt": "11:00"
+    },
+    {
+      "id": "9889u812",
+      "startAt": "11:00",
+      "endAt": "12:00"
+    }
+  ],
+  "martes": [
+    {
+      "id": "89sdf",
+      "startAt": "11:00",
+      "endAt": "12:00"
+    }
+  ]
+}
 
 
 

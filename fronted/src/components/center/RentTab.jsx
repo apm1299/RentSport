@@ -84,13 +84,19 @@ export const RentTab = ({
         getInstallation,
         getInstalationsSport,
     } = useInstallation()
+    const days = ["Domingo","Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+
+    //Dia actual (por defecto)
+    const today = new Date();
+    //Guarda el dia del calendario pulsado
+    const [date, setDate] = useState(today.getDate());
 
     //Guarda el id del deporte (option) seleccionado
-    const [activeOption, setActiveOption] = useState([])
+    const [activeOption, setActiveOption] = useState(null)
     //Guarda el id de la instalacion (option) seleccionado
-    const [activeOptionInstallation, setActiveOptionInstallation] = useState([])
+    const [activeOptionInstallation, setActiveOptionInstallation] = useState(null);
 
-    const [installation, setInstallation] = useState([])
+    const [installation, setInstallation] = useState(null)
     useEffect(() => {
         const callToGetCustomers = async () => {
             setInstallation(await getInstallation(activeOptionInstallation));
@@ -124,7 +130,11 @@ export const RentTab = ({
             <div className='pt-6 w-10/12 mx-auto'>
                 <h1 className='text-center font-bold text-xl'>Calendario</h1>
                 <CalendarContainer>
-                    <Calendar />
+                <Calendar
+                    onClickDay={(e) => {
+                        setDate(e.getDay());
+                    }}
+                />
                 </CalendarContainer>
                 <div className='pt-6 w-10/12 mx-auto'>
                     <h1 className='text-center font-bold text-xl'>SELECT DEPORTES</h1>
@@ -196,7 +206,7 @@ export const RentTab = ({
                     {
                         installation
                         ? (
-                            console.log(installation),
+                            console.log(installation.schedure),
                             'wi'
                         ):
                         (

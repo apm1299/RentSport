@@ -19,21 +19,23 @@ export const useInstallation = () => {
         return installations;
     }
 
-    async function getInstallation(idInstallation) {
+    async function getInstallation(idInstallation = null) {
         let installation = null;
-        let headers = new Headers();
-        headers.set("Accept", "application/ld+json");
-        headers.set("Content-Type", "application/ld+json")
-        await global.fetch(`http://localhost:8000/api/installations/${idInstallation}`, {
-            method: 'GET',
-            headers,
-            credentials: 'include',
-        }).then(response => response.json()
-            .then(async retrieved => {
-                installation = await retrieved;
-                console.log(retrieved);
-            }))
-            .catch(error => console.error(error))
+        if (idInstallation) {
+            let headers = new Headers();
+            headers.set("Accept", "application/ld+json");
+            headers.set("Content-Type", "application/ld+json")
+            await global.fetch(`http://localhost:8000/api/installations/${idInstallation }`, {
+                method: 'GET',
+                headers,
+                credentials: 'include',
+            }).then(response => response.json()
+                .then(async retrieved => {
+                    installation = await retrieved;
+                    console.log(retrieved);
+                }))
+                .catch(error => console.error(error))
+        }
         return installation;
     }
 
