@@ -84,12 +84,12 @@ export const RentTab = ({
         getInstallation,
         getInstalationsSport,
     } = useInstallation()
-    const days = ["Domingo","Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+    const days = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
     //Dia actual (por defecto)
     const today = new Date();
     //Guarda el dia del calendario pulsado
-    const [date, setDate] = useState(today.getDate());
+    const [date, setDate] = useState(today.getDay());
 
     //Guarda el id del deporte (option) seleccionado
     const [activeOption, setActiveOption] = useState(null)
@@ -130,11 +130,11 @@ export const RentTab = ({
             <div className='pt-6 w-10/12 mx-auto'>
                 <h1 className='text-center font-bold text-xl'>Calendario</h1>
                 <CalendarContainer>
-                <Calendar
-                    onClickDay={(e) => {
-                        setDate(e.getDay());
-                    }}
-                />
+                    <Calendar
+                        onClickDay={(e) => {
+                            setDate(e.getDay());
+                        }}
+                    />
                 </CalendarContainer>
                 <div className='pt-6 w-10/12 mx-auto'>
                     <h1 className='text-center font-bold text-xl'>SELECT DEPORTES</h1>
@@ -185,7 +185,7 @@ export const RentTab = ({
                                     </option>
                                     {installationsSport.map((installation, idx) => (
                                         <option
-                                           onClick={() => setActiveOptionInstallation(installation.id)}
+                                            onClick={() => setActiveOptionInstallation(installation.id)}
                                             key={`${installation.name}-${idx}`}
                                             value={installation?.['@id']}
                                         >
@@ -205,17 +205,32 @@ export const RentTab = ({
                     <h1 className='text-center font-bold text-xl'>HORAS DISPONIBLES</h1>
                     {
                         installation
-                        ? (
-                            console.log(installation.schedure),
-                            'wi'
-                        ):
-                        (
-                            console.log(installation),
-                            'no'
-                        )
+                            ? (
+                                <div className='flex'>
+                                    <div className='grid grid-cols-3 text-center w-9/12'>
+                                    {installation.schedure[days[date]].map((section, idx) => (
+                                        < div className='bg-logo-200 gap-2 border-2'
+                                            key={`${section.id}-${idx}`}
+                                        >
+                                            <p>{section.startAt}</p>
+                                            <p>{section.endAt}</p>
+                                        </div>
+                                    ))}
+                                    </div>
+                                    <div className='w-3/12 text-center  my-auto'>
+                                        <button className='bg-hardpurple-400 hover:bg-hardpurple-300 p-4 text-white my-auto'>Ocupar</button>
+                                    </div>
+                                </div>
+                            ) :
+                            (
+                                console.log(installation),
+                                'no'
+                            )
                     }
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
+
+

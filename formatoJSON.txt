@@ -46,3 +46,72 @@
 
 
 
+
+
+
+{
+  "lunes": [
+    {
+      "id": "8931723",
+      "startAt": "10:00",
+      "endAt": "11:00"
+    },
+    {
+      "id": "9889u812",
+      "startAt": "11:00",
+      "endAt": "12:00"
+    },
+    {
+      "id": "43r3dw",
+      "startAt": "12:00",
+      "endAt": "13:00"
+    },
+    {
+      "id": "324wewe",
+      "startAt": "13:00",
+      "endAt": "14:00"
+    },
+    {
+      "id": "32rdewdw",
+      "startAt": "17:00",
+      "endAt": "18:00"
+    },
+    {
+      "id": "gr54gre",
+      "startAt": "18:00",
+      "endAt": "19:00"
+    },
+    {
+      "id": "fe43ewef",
+      "startAt": "19:00",
+      "endAt": "20:00"
+    },
+    {
+      "id": "trh45hr",
+      "startAt": "20:00",
+      "endAt": "21:00"
+    },
+    {
+      "id": "21e2e3",
+      "startAt": "21:00",
+      "endAt": "22:00"
+    }
+  ],
+  "martes": [
+    {
+      "id": "89sdf",
+      "startAt": "11:00",
+      "endAt": "12:00"
+    },
+    {
+      "id": "89sdf",
+      "startAt": "12:00",
+      "endAt": "13:00"
+    }
+  ]
+}
+  
+
+
+
+
