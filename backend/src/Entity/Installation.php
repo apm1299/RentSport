@@ -48,6 +48,9 @@ class Installation
 
     #[ORM\OneToMany(mappedBy: 'installation', targetEntity: Rental::class)]
     #[Groups(['installation:read','installation:write'])]
+    #[ApiProperty(
+        readableLink: true
+    )]
     private $rentals;
 
     #[ORM\ManyToMany(targetEntity: Sport::class, mappedBy: 'installations')]

@@ -7,6 +7,7 @@ use App\Repository\RentalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RentalRepository::class)]
 #[ApiResource]
@@ -35,6 +36,10 @@ class Rental
     #[ORM\ManyToOne(targetEntity: RentalType::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
     private $type;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['installation:read'])]
+    private $schedure;
 
     public function getId(): ?int
     {
@@ -73,6 +78,18 @@ class Rental
     public function setLessor(?User $lessor): self
     {
         $this->lessor = $lessor;
+
+        return $this;
+    }
+
+    public function getSchedure(): string
+    {
+        return $this->schedure;
+    }
+
+    public function setSchedure(string $schedure): self
+    {
+        $this->schedure = $schedure;
 
         return $this;
     }

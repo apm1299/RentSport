@@ -15,11 +15,11 @@ export const MyTab = ({
           <Tab.Group>
             <Tab.List className={'w-6/12 mx-auto mt-4'}>
               <Tab className={({ selected }) =>
-                selected ? 'w-6/12 bg-logo-500 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl' : 'w-6/12 bg-logo-400 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl'}>
+                selected ? 'ease-linear duration-300 w-6/12 bg-logo-500 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl' : 'w-6/12 bg-logo-400 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl'}>
                 Alquilar
               </Tab>
               <Tab className={({ selected }) =>
-                selected ? 'w-6/12 bg-logo-500 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl' : 'w-6/12 bg-logo-400 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl'}>
+                selected ? 'ease-linear duration-300 w-6/12 bg-logo-500 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl' : 'w-6/12 bg-logo-400 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl'}>
                 Eventos
               </Tab>
             </Tab.List>

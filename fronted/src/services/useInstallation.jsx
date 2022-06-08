@@ -15,8 +15,8 @@ export const useInstallation = () => {
                     installations = await retrieved['hydra:member'];
                 }))
                 .catch(error => console.error(error))
-        
         return installations;
+        //return Array.isArray(installations) ? installations[0] : null;
     }
 
     async function getInstallation(idInstallation = null) {
