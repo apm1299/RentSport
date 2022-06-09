@@ -100,6 +100,7 @@ export const RentTab = ({ center }) => {
   const today = new Date();
   //Guarda el dia del calendario pulsado
   const [date, setDate] = useState(today.getDay());
+  const [dateCalendar, setDateCalendar] = useState(`${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
 
   //Guarda el id del deporte (option) seleccionado
   const [activeOption, setActiveOption] = useState(null);
@@ -137,13 +138,29 @@ export const RentTab = ({ center }) => {
     return [];
   }, [center.sports]);
 
+  const rentals = useMemo(() => 
+    {
+      if (installation) {
+        return installation.rentals.filter(e => {
+          const date = new Date(e.date);
+          return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` === dateCalendar;
+        })
+      }
+
+      return [];
+    }
+  , [installation, dateCalendar]);
+
+
+  console.log(rentals)
+
   return (
     <>
-    <EditHoursInstallation
+      <EditHoursInstallation
         setIsOpenEditInstallation={setIsOpenEditInstallation}
         isOpenEditInstallation={isOpenEditInstallation}
         activeOptionInstallation={activeOptionInstallation}
-     />
+      />
       <div>
         <div className="pt-6 w-10/12 mx-auto">
           <h1 className="text-center font-bold text-xl">Calendario</h1>
@@ -151,10 +168,14 @@ export const RentTab = ({ center }) => {
             <Calendar
               onClickDay={(e) => {
                 setDate(e.getDay());
+                setDateCalendar(
+                  `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`
+                );
               }}
             />
           </CalendarContainer>
           <div className="pt-6 w-10/12 mx-auto">
+            <h3 className="text-center font-semibold text-base">Dia : {dateCalendar}</h3>
             <h1 className="text-center font-bold text-xl">SELECT DEPORTES</h1>
             {sports?.length > 0 ? (
               <select
@@ -186,7 +207,6 @@ export const RentTab = ({ center }) => {
             )}
           </div>
           <div className="pt-6 w-10/12 mx-auto">
-          {console.log(installationsSport)}
 
             <h1 className="text-center font-bold text-xl">SELECT PISTA</h1>
             {installationsSport.length > 0 ? (
@@ -194,7 +214,6 @@ export const RentTab = ({ center }) => {
                 id="select-project"
                 className="mt-8 bg-white py-3 px-4 block w-full shadow-sm border-2 border-softblue-800 rounded-md"
                 placeholder="Seleccione proyecto"
-                value={0}
               >
                 <option className="text-gray-500" value={0}>
                   Selecciona la pista
@@ -222,7 +241,13 @@ export const RentTab = ({ center }) => {
                 <div className="w-full gap-2 flex flex-col">
                   {installation.schedure[days[date]].map((section, idx) => (
                     <div
-                      className="px-4 py-2 gap-2 flex justify-between bg-hardpurple-100 rounded-xl"
+                      className={`px-4 py-2 gap-2 flex justify-between  rounded-xl ${
+                        rentals.some(
+                          (r) => r.schedure === section.id
+                        )
+                          ? "bg-hardorange-100"
+                          : "bg-hardpurple-100"
+                      }`}
                       key={`${section.id}-${idx}`}
                     >
                       <div className="gap-1 flex flex-col flex-grow justify-center items-start">
@@ -233,7 +258,6 @@ export const RentTab = ({ center }) => {
                           </span>
                         </div>
                         <div className="gap-1 flex items-center text-gray-900">
-                            {installation.rentals.some(r => r.schedure === section.id) && 'sad'}
                           <span>
                             <ClockOutline className="h-5 w-5 mt-0.5" />
                           </span>
@@ -244,26 +268,37 @@ export const RentTab = ({ center }) => {
                         </div>
                       </div>
                       <div className="flex items-center flex-none">
-                        <button
-                          className={`px-4 py-1 bg-hardpurple-400 hover:bg-hardpurple-300
+                        {installation.rentals.some(
+                          (r) => r.schedure === section.id
+                        ) ? (
+                          <h3
+                            className="px-4 py-1 bg-hardorange-400
+                          text-white rounded-2xl"
+                          >
+                            Ocupado
+                          </h3>
+                        ) : (
+                          <button
+                            className={`px-4 py-1 bg-hardpurple-400 hover:bg-hardpurple-300
                         text-white rounded-2xl ${
                           rentHoursSelected.some((e) => e === section.id)
                             ? "ring ring-offset-2 ring-hardorange-400 bg-hardorange-200 hover:bg-hardorange-100 text-black"
                             : ""
                         }`}
-                          key={`${section.id}-${idx}`}
-                          onClick={() =>
-                            setRentHoursSelected((selected) =>
-                              selected.some((e) => e === section.id)
-                                ? selected.filter((e) => e !== section.id)
-                                : [...selected, section.id]
-                            )
-                          }
-                        >
-                          {rentHoursSelected.find((r) => r === section.id)
-                            ? "Añadido"
-                            : "Añadir"}
-                        </button>
+                            key={`${section.id}-${idx}`}
+                            onClick={() =>
+                              setRentHoursSelected((selected) =>
+                                selected.some((e) => e === section.id)
+                                  ? selected.filter((e) => e !== section.id)
+                                  : [...selected, section.id]
+                              )
+                            }
+                          >
+                            {rentHoursSelected.find((r) => r === section.id)
+                              ? "Añadido"
+                              : "Añadir"}
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}

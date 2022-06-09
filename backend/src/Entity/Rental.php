@@ -19,6 +19,7 @@ class Rental
     private $id;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['installation:read'])]
     private $date;
 
     #[ORM\ManyToOne(targetEntity: Sport::class, inversedBy: 'rentals')]
