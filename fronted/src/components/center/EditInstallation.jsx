@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
 import { Transition } from '@headlessui/react'
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-export const EditHoursInstallation = ({
+export const EditInstallation = ({
     isOpenEditInstallation,
     setIsOpenEditInstallation,
     activeOptionInstallation,

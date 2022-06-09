@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Calendar } from "react-calendar";
 import styled from "styled-components";
 import { useInstallation } from "../../services/useInstallation";
-import { EditHoursInstallation } from "./EditHoursInstallation";
+import { EditInstallation } from "./EditInstallation";
 
 const CalendarContainer = styled.div`
   /* ~~~ container styles ~~~ */
@@ -105,8 +105,7 @@ export const RentTab = ({ center }) => {
   //Guarda el id del deporte (option) seleccionado
   const [activeOption, setActiveOption] = useState(null);
   //Guarda el id de la instalacion (option) seleccionado
-  const [activeOptionInstallation, setActiveOptionInstallation] =
-    useState(null);
+  const [activeOptionInstallation, setActiveOptionInstallation] = useState(null);
 
   const [installation, setInstallation] = useState(null);
   useEffect(() => {
@@ -138,25 +137,24 @@ export const RentTab = ({ center }) => {
     return [];
   }, [center.sports]);
 
-  const rentals = useMemo(() => 
-    {
-      if (installation) {
-        return installation.rentals.filter(e => {
-          const date = new Date(e.date);
-          return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` === dateCalendar;
-        })
-      }
-
-      return [];
+  const rentals = useMemo(() => {
+    if (installation) {
+      return installation.rentals.filter(e => {
+        const date = new Date(e.date);
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` === dateCalendar;
+      })
     }
-  , [installation, dateCalendar]);
+
+    return [];
+  }
+    , [installation, dateCalendar]);
 
 
   console.log(rentals)
 
   return (
     <>
-      <EditHoursInstallation
+      <EditInstallation
         setIsOpenEditInstallation={setIsOpenEditInstallation}
         isOpenEditInstallation={isOpenEditInstallation}
         activeOptionInstallation={activeOptionInstallation}
@@ -241,13 +239,12 @@ export const RentTab = ({ center }) => {
                 <div className="w-full gap-2 flex flex-col">
                   {installation.schedure[days[date]].map((section, idx) => (
                     <div
-                      className={`px-4 py-2 gap-2 flex justify-between  rounded-xl ${
-                        rentals.some(
-                          (r) => r.schedure === section.id
-                        )
-                          ? "bg-hardorange-100"
-                          : "bg-hardpurple-100"
-                      }`}
+                      className={`px-4 py-2 gap-2 flex justify-between  rounded-xl ${rentals.some(
+                        (r) => r.schedure === section.id
+                      )
+                        ? "bg-hardorange-100"
+                        : "bg-hardpurple-100"
+                        }`}
                       key={`${section.id}-${idx}`}
                     >
                       <div className="gap-1 flex flex-col flex-grow justify-center items-start">
@@ -268,7 +265,7 @@ export const RentTab = ({ center }) => {
                         </div>
                       </div>
                       <div className="flex items-center flex-none">
-                        {installation.rentals.some(
+                        {rentals.some(
                           (r) => r.schedure === section.id
                         ) ? (
                           <h3
@@ -280,11 +277,10 @@ export const RentTab = ({ center }) => {
                         ) : (
                           <button
                             className={`px-4 py-1 bg-hardpurple-400 hover:bg-hardpurple-300
-                        text-white rounded-2xl ${
-                          rentHoursSelected.some((e) => e === section.id)
-                            ? "ring ring-offset-2 ring-hardorange-400 bg-hardorange-200 hover:bg-hardorange-100 text-black"
-                            : ""
-                        }`}
+                        text-white rounded-2xl ${rentHoursSelected.some((e) => e === section.id)
+                                ? "ring ring-offset-2 ring-hardorange-400 bg-hardorange-200 hover:bg-hardorange-100 text-black"
+                                : ""
+                              }`}
                             key={`${section.id}-${idx}`}
                             onClick={() =>
                               setRentHoursSelected((selected) =>
@@ -309,7 +305,7 @@ export const RentTab = ({ center }) => {
                     className="mt-6 w-full bg-hardpurple-400 hover:bg-hardpurple-300 p-1 text-white rounded-2xl"
                     onClick={() => setIsOpenEditInstallation(true)}
                   >
-                    Editar horas instalacion
+                    Editar instalacion
                   </button>
                 </div>
               </div>
