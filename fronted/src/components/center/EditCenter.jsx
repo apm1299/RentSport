@@ -116,7 +116,7 @@ export const EditCenter = ({
                 </div>
                 <div>
                     <div className='w-9/12 mx-auto py-2'>
-                        <div className='flex pt-4'>
+                        <div className='block pt-4'>
                             <div className='w-full mr-1'>
                                 <button
                                     type="button"
@@ -124,15 +124,6 @@ export const EditCenter = ({
                                     className="block mx-auto w-full h-9 rounded bg-hardpurple-400 hover:bg-hardpurple-300 active:bg-hardpurple-300 text-white font-bold my-2 text-center"
                                 >
                                     Actualizar
-                                </button>
-                            </div>
-                            <div className='w-full ml-1'>
-                                <button
-                                    onClick={() => setIsOpenEditCenter(false)}
-                                    className="block mx-auto w-full h-9 rounded bg-logo-500 hover:bg-logo-400
-                                        active:bg-logo-400 text-white font-bold my-2 text-center"
-                                >
-                                    Cancelar
                                 </button>
                             </div>
                         </div>

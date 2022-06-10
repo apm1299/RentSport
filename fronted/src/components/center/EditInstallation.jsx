@@ -15,7 +15,7 @@ export const EditInstallation = ({
     const formik = useFormik({
         initialValues: {
             name: "",
-            schedure: "",
+            schedule: "",
             pricePerRange: "",
         },
         validationSchema: validation,

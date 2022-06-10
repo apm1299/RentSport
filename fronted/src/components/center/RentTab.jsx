@@ -234,13 +234,13 @@ export const RentTab = ({ center }) => {
           </div>
           <div className="pt-6 w-10/12 mx-auto">
             <h1 className="text-center font-bold text-xl">HORAS DISPONIBLES</h1>
-            {installation && installation.schedure?.[days[date]]?.length > 0 ? (
+            {installation && installation.schedule?.[days[date]]?.length > 0 ? (
               <div className="block">
                 <div className="w-full gap-2 flex flex-col">
-                  {installation.schedure[days[date]].map((section, idx) => (
+                  {installation.schedule[days[date]].map((section, idx) => (
                     <div
                       className={`px-4 py-2 gap-2 flex justify-between  rounded-xl ${rentals.some(
-                        (r) => r.schedure === section.id
+                        (r) => r.schedule === section.id
                       )
                         ? "bg-hardorange-100"
                         : "bg-hardpurple-100"
@@ -266,7 +266,7 @@ export const RentTab = ({ center }) => {
                       </div>
                       <div className="flex items-center flex-none">
                         {rentals.some(
-                          (r) => r.schedure === section.id
+                          (r) => r.schedule === section.id
                         ) ? (
                           <h3
                             className="px-4 py-1 bg-hardorange-400

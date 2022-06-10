@@ -9,23 +9,31 @@ use App\Repository\SportRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: SportRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['Sport:read']],
+    denormalizationContext: ['groups' => ['Sport:write']],
+)]
 class Sport
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['Sport:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
+    #[Groups(['Sport:read', 'Sport:write'])]
     private $name;
 
     #[ORM\OneToMany(mappedBy: 'sport', targetEntity: Rental::class)]
     private $rentals;
 
     #[ORM\ManyToMany(targetEntity: Installation::class, inversedBy: 'sports')]
+    #[Groups(['Sport:read', 'Sport:write'])]
     private $installations;
 
     public function __construct()

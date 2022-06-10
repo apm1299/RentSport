@@ -40,7 +40,7 @@ class Rental
 
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups(['installation:read'])]
-    private $schedure;
+    private $schedule;
 
     public function getId(): ?int
     {
@@ -83,14 +83,14 @@ class Rental
         return $this;
     }
 
-    public function getSchedure(): string
+    public function getSchedule(): string
     {
-        return $this->schedure;
+        return $this->schedule;
     }
 
-    public function setSchedure(string $schedure): self
+    public function setSchedule(string $schedule): self
     {
-        $this->schedure = $schedure;
+        $this->schedule = $schedule;
 
         return $this;
     }

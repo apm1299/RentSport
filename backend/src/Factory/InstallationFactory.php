@@ -40,7 +40,7 @@ final class InstallationFactory extends ModelFactory
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'name' => self::faker()->text(),
-            'schedure' => [],
+            'schedule' => [],
             'pricePerRange' => self::faker()->randomFloat(2,2,20),
         ];
     }

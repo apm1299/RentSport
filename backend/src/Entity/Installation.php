@@ -35,7 +35,7 @@ class Installation
 
     #[ORM\Column(type: 'json')]
     #[Groups(['installation:read','installation:write'])]
-    private $schedure = [];
+    private $schedule = [];
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     #[Groups(['installation:read','installation:write'])]
@@ -55,6 +55,7 @@ class Installation
 
     #[ORM\ManyToMany(targetEntity: Sport::class, mappedBy: 'installations')]
     #[ApiSubresource()]
+    #[Groups(['installation:read','installation:write'])]
     private $sports;
 
     public function __construct()
@@ -80,14 +81,14 @@ class Installation
         return $this;
     }
 
-    public function getSchedure(): ?array
+    public function getSchedule(): ?array
     {
-        return $this->schedure;
+        return $this->schedule;
     }
 
-    public function setSchedure(array $schedure): self
+    public function setSchedule(array $schedule): self
     {
-        $this->schedure = $schedure;
+        $this->schedule = $schedule;
 
         return $this;
     }
