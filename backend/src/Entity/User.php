@@ -47,7 +47,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['User:read', 'User:write'])]
     private $password;
 
-    #[ORM\OneToOne(inversedBy: 'owner', targetEntity: UserImage::class, cascade: ['persist', 'remove'])]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['User:read', 'User:write'])]
     private $image;
 
     #[ORM\OneToOne(mappedBy: 'userAdmin', targetEntity: Center::class, cascade: ['persist', 'remove'])]
@@ -141,15 +142,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getImage(): ?UserImage
+    /**
+     * @return mixed
+     */
+    public function getImage()
     {
         return $this->image;
     }
 
-    public function setImage(?UserImage $image): self
+    /**
+     * @param mixed $image
+     * @return User
+     */
+    public function setImage($image)
     {
         $this->image = $image;
-
         return $this;
     }
 

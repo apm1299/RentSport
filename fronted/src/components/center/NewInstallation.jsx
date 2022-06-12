@@ -4,13 +4,14 @@ import * as Yup from "yup";
 import { useSport } from "../../services/useSport";
 import { CheckPicker, TagPicker } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
+import { useState } from "react";
+import { useInstallation } from "../../services/useInstallation";
 
-export const NewInstallation = ({ setIsOpenEditCenter }) => {
+export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
 
-    
+  const { createInstallation } = useInstallation();
   const { sports } = useSport();
-  
-    console.log(sports)
+
   const validateDay = Yup.array().of(
     Yup.object({
       id: Yup.string().required(),
@@ -30,18 +31,18 @@ export const NewInstallation = ({ setIsOpenEditCenter }) => {
         return startAtCondition && endAtCondition
           ? true
           : this.createError({
-              path: `${this.path}`,
-              message: "Incorrect1",
-            });
+            path: `${this.path}`,
+            message: "Incorrect1",
+          });
       } else {
         const endAtCondition = item.startAt < item.endAt;
 
         return endAtCondition
           ? true
           : this.createError({
-              path: `${this.path}`,
-              message: "Incorrect2",
-            });
+            path: `${this.path}`,
+            message: "Incorrect2",
+          });
       }
     })
   );
@@ -74,8 +75,9 @@ export const NewInstallation = ({ setIsOpenEditCenter }) => {
 
   const formik = useFormik({
     initialValues: {
+      center: `/api/centers/${center.id}`,
       name: "",
-      sports: "",
+      sports: [`/api/sports/1`,`/api/sports/2`],
       schedule: {
         lunes: [],
         martes: [],
@@ -90,10 +92,12 @@ export const NewInstallation = ({ setIsOpenEditCenter }) => {
     validationSchema: validation,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
-      // update(activeOptionInstallation,values);
+      createInstallation(values);
     },
   });
 
+  //const [sportSelected, setSportSelected] = useState([]);
+  
   return (
     <>
       <div className="m-6 rounded-2xl bg-gray-200">
@@ -159,16 +163,24 @@ export const NewInstallation = ({ setIsOpenEditCenter }) => {
             Deportes disponibles
           </label>
           {sports.length > 0 && (
-            <CheckPicker data={sports} 
-            block 
-            labelKey="name" 
-            valueKey="id" 
-            sticky 
-            onChange={() => {
-                formik.setFieldValue(`sports`, [
-                  ...formik.getFieldProps(`sports`).some((e) => e === ),
-                ]);
-              }}
+            <CheckPicker data={sports}
+              block
+              labelKey="name"
+              valueKey="id"
+              sticky
+              // onChange={() =>
+              //   setSportSelected((selected) =>
+              //     selected.some((e) => e === section.id)
+              //       ? selected.filter((e) => e !== section.id)
+              //       : [...selected, section.id]
+              //   )
+              // }
+
+                // formik.setFieldValue(`sports`, [
+                //   ...formik.getFieldProps(`sports`).some((e) => e === )
+                //   ? selected.filter((e) => e !== section.id)
+                //                   : [...selected, section.id]
+                // ]);
             />
           )}
 
@@ -235,14 +247,14 @@ export const NewInstallation = ({ setIsOpenEditCenter }) => {
                               `schedule.${day}.${idx}`
                             ).error === "string"
                               ? formik.getFieldMeta(`schedule.${day}.${idx}`)
-                                  .error
+                                .error
                               : ""}
                           </div>
                         </div>
                       ))}
                     <div className="text-red-500">
                       {typeof formik.getFieldMeta(`schedule.${day}`).error ===
-                      "string"
+                        "string"
                         ? formik.getFieldMeta(`schedule.${day}`).error
                         : ""}
                     </div>

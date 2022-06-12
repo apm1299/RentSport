@@ -107,6 +107,7 @@ class AppFixtures extends Fixture
             'name' => 'Pabellon',
             'center' => $ayunVillacarrillo,
         ]);
+
         $pistaTenis1 = InstallationFactory::new()->create([
             'name' => 'Tenis 1',
             'center' => $ayunVillacarrillo,
@@ -163,18 +164,22 @@ class AppFixtures extends Fixture
             'lessor' => $jose,
             'installation' => $pabellon,
             'type' => $normal,
+            'schedule' => '324wewe'
         ]);
         RentalFactory::new()->create([
             'sport' => $futbol,
             'lessor' => $jose,
             'installation' => $pabellon,
             'type' => $normal,
+            'schedule' => 'gr54gre'
+
         ]);
         RentalFactory::new()->create([
             'sport' => $tenis,
             'lessor' => $jose,
             'installation' => $pistaTenis1,
             'type' => $normal,
+            'schedule' => '324wewe'
         ]);
 
 

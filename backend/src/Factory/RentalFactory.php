@@ -37,7 +37,7 @@ final class RentalFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
-        $date = self::faker()->dateTimeBetween('-1 month','now');
+        $date = self::faker()->dateTimeBetween('-2 days','now');
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'date' => $date,

@@ -5,13 +5,18 @@ import { UpdateSurnames } from './UpdateSurnames'
 import { UpdateEmail } from './UpdateEmail'
 import { UpdateImage } from './UpdateImage';
 import { ContainerUpdatePassword } from './ContainerUpdatePassword';
+import { Spinner } from '../commons/Spinner';
 
 export const Profile = () => {
     const {
         updateUser,
         userLoggedIn,
         setUserLoggedIn,
+        isLoading
     } = useUser();
+    if (isLoading) {
+        return <Spinner />
+    }
     return (
         <>
             <div className='bg-hardpurple-100 '>
@@ -25,6 +30,7 @@ export const Profile = () => {
                                 <UpdateImage
                                     updateUser={updateUser}
                                     userLoggedIn={userLoggedIn}
+                                    setUserLoggedIn={setUserLoggedIn}
                                 />
                             )
                         }

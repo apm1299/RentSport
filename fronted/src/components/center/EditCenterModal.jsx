@@ -36,7 +36,7 @@ export const EditCenterModal = ({
                 center={center}
                 setIsOpenEditCenter={setIsOpenEditCenter}
               />
-              <NewInstallation setIsOpenEditCenter={setIsOpenEditCenter} />
+              <NewInstallation center={center} setIsOpenEditCenter={setIsOpenEditCenter} />
             </div>
           </div>
         </div>

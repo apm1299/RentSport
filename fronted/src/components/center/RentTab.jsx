@@ -73,7 +73,7 @@ const CalendarContainer = styled.div`
     opacity: 0.6;
   }
   .react-calendar__month-view__days__day--weekend {
-    color: #ffb133;
+    color: #fffff;
   }
 `;
 
@@ -165,10 +165,13 @@ export const RentTab = ({ center }) => {
           <CalendarContainer>
             <Calendar
               onClickDay={(e) => {
-                setDate(e.getDay());
-                setDateCalendar(
-                  `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`
-                );
+                //Comparar que el dia señalado sea mayor al actual
+                //if ( `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}` <=  `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`) {
+                  setDate(e.getDay());
+                  setDateCalendar(
+                    `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`
+                  );
+                //}
               }}
             />
           </CalendarContainer>

@@ -3,13 +3,17 @@ import { useEffect, useState } from "react";
 export const useUser = () => {
     //const [userLogin, setUserLogin] = useState([]);
     const [userLoggedIn, setUserLoggedIn] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         const callToGetUserLoggedIn = async () => {
             setUserLoggedIn(await getUserLoggedIn(1));
+            setLoading(false);
         }
         callToGetUserLoggedIn();
     }, []);
+
 
     //Usuario Logueado
     async function getUserLoggedIn(id) {
@@ -70,5 +74,6 @@ export const useUser = () => {
         updateUser,
         userLoggedIn,
         setUserLoggedIn,
+        isLoading,
     }
 }

@@ -38,10 +38,27 @@ export const useInstallation = () => {
         }
         return installation;
     }
+    //Crear instalacion
+    async function createInstallation(values) {
 
+        const headers = new Headers();
+        headers.set("Accept", "application/ld+json");
+        headers.set("Content-Type", "application/ld+json")
+
+        await fetch('http://localhost:8000/api/installations', {
+            method: 'POST',
+            headers,
+            credentials: 'include',
+            body: JSON.stringify(values, null, 2),
+        }).then(response => response.json()
+            .then(retrieved => {
+            }))
+            .catch(error => console.error(error))
+    }
 
     return {
         getInstalationsSport,
         getInstallation,
+        createInstallation
     }
 }
