@@ -7,20 +7,27 @@ use App\Repository\RentalTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RentalTypeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['RentalType:read']],
+    denormalizationContext: ['groups' => ['RentalType:write']],
+)]
 class RentalType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['RentalType:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
+    #[Groups(['RentalType:read', 'RentalType:write'])]
     private $name;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Rental::class)]
+    #[Groups(['RentalType:read', 'RentalType:write'])]
     private $rentals;
 
     public function __construct()

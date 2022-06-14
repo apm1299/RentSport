@@ -1,7 +1,9 @@
 import { Transition } from '@headlessui/react'
 import React, { useState } from 'react'
 import { useFormik } from "formik";
-import * as Yup from "yup";
+import { useRental } from '../../services/useRental';
+import { FlagMessage } from '../commons/FlagMessage';
+import { useWallet } from '../../services/useWallet';
 
 export const PaymentModal = ({
     isOpenPayment,
@@ -11,27 +13,39 @@ export const PaymentModal = ({
     dateCalendar,
     sports,
     activeOption,
+    userLoggedIn,
+    setRentHoursSelected
 }) => {
+    const { updateWallet } = useWallet();
+    const { showMessageSucess, showMessageError } = FlagMessage()
+    const { createRental } = useRental();
     const [activeOptionType, setActiveOptionType] = useState(1);
-
-    const validation = Yup.object().shape({
-        
-      });
-    
-      const formik = useFormik({
+    console.log(dateCalendar);
+    const formik = useFormik({
         initialValues: {
-          center: "",
-          lessor:"",
-          installation:"",
-          type:"",
-          date:"",
-          schedure:"",
+            sport: `api/sports/${activeOption}`,
+            lessor: `api/users/${userLoggedIn.id}`,
+            installation: `api/installations/${activeOptionInstallation.id}`,
+            type: `api/rental_types/${activeOptionType}`,
+            date: "",
+            schedule: "",
         },
-        validationSchema: validation,
-        onSubmit: (values) => {
-            //updateWallet(user.id, values);
+        onSubmit: (values) => { 
+            if(userLoggedIn.wallet - (activeOptionInstallation.pricePerRange * rentHoursSelected.length) >= 0 ){
+                for(let i=0; i<rentHoursSelected.length; i++){
+                    values.schedule = rentHoursSelected[i].id;
+                    values.date = dateCalendar;
+                    createRental(values)
+                }
+                updateWallet(userLoggedIn.id, userLoggedIn.wallet - (activeOptionInstallation.pricePerRange * rentHoursSelected.length));
+                setRentHoursSelected([]);
+                setIsOpenPayment(false);
+                showMessageSucess("Pista alquilada");
+            }else{
+                showMessageError("Dinero insuficiente");
+            }
         },
-      });
+    });
     return (
         <Transition show={isOpenPayment}>
             <div className="justify-center items-center flex overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none">
@@ -65,20 +79,19 @@ export const PaymentModal = ({
                                 <h4>Horas seleccionadas</h4>
                                 {
                                     rentHoursSelected.length > 0
-                                        && (
-                                            console.log(rentHoursSelected),
-                                            <div className='block'>
-                                                {rentHoursSelected.map((rentHours, idx) => (
-                                                    <div className=' flex gap-2 border-2 border-gray-300 rounded px-2 my-2 bg-slate-200'
-                                                        key={`${rentHours.id} - ${idx}`}
-                                                    >
-                                                        <div>
-                                                            <h3>{rentHours.startAt}-{rentHours.endAt}</h3>
-                                                        </div>
+                                    && (
+                                        <div className='block'>
+                                            {rentHoursSelected.map((rentHours, idx) => (
+                                                <div className=' flex gap-2 border-2 border-gray-300 rounded px-2 my-2 bg-slate-200'
+                                                    key={`${rentHours.id} - ${idx}`}
+                                                >
+                                                    <div>
+                                                        <h3>{rentHours.startAt}-{rentHours.endAt}</h3>
                                                     </div>
-                                                ))}
-                                            </div>
-                                        )
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )
                                 }
                                 <h4>Deporte</h4>
                                 <h3 className='flex gap-2 border-2 border-gray-300 rounded px-2 my-2 bg-slate-200'>
@@ -118,7 +131,7 @@ export const PaymentModal = ({
                                 <div className='w-full mr-1'>
                                     <button
                                         type="button"
-                                        //onClick={formik.handleSubmit}
+                                        onClick={formik.handleSubmit}
                                         className="block mx-auto w-full h-9 rounded bg-hardpurple-400 hover:bg-hardpurple-300 active:bg-hardpurple-300 text-white font-bold my-2 text-center"
                                     >
                                         Pagar {activeOptionInstallation.pricePerRange * rentHoursSelected.length} €

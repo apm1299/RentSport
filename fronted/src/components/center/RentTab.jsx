@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Calendar } from "react-calendar";
 import styled from "styled-components";
 import { useInstallation } from "../../services/useInstallation";
+import { useUser } from "../../services/useUser";
 import { EditInstallation } from "./EditInstallation";
 import { PaymentModal } from "./PaymentModal";
 
@@ -84,6 +85,9 @@ export const RentTab = ({ center }) => {
     getInstallation,
     getInstalationsSport,
   } = useInstallation();
+
+  const { userLoggedIn } = useUser();
+
   const days = [
     "domingo",
     "lunes",
@@ -139,6 +143,7 @@ export const RentTab = ({ center }) => {
     return [];
   }, [center.sports]);
 
+
   const rentals = useMemo(() => {
     if (installation) {
       return installation.rentals.filter(e => {
@@ -146,10 +151,10 @@ export const RentTab = ({ center }) => {
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` === dateCalendar;
       })
     }
-
     return [];
   }
-    , [installation, dateCalendar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [rentHoursSelected, installation, dateCalendar]);
 
 
   return (
@@ -160,7 +165,7 @@ export const RentTab = ({ center }) => {
         activeOptionInstallation={activeOptionInstallation}
       />
       {
-        activeOptionInstallation &&
+        activeOptionInstallation && userLoggedIn &&
         <PaymentModal
           isOpenPayment={isOpenPayment}
           setIsOpenPayment={setIsOpenPayment}
@@ -169,6 +174,8 @@ export const RentTab = ({ center }) => {
           dateCalendar={dateCalendar}
           sports={sports}
           activeOption={activeOption}
+          userLoggedIn={userLoggedIn}
+          setRentHoursSelected={setRentHoursSelected}
         />
       }
       <div>

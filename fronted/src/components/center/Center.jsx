@@ -5,6 +5,7 @@ import { Spinner } from '../commons/Spinner';
 import { useParams } from 'react-router-dom';
 import { EditCenterModal } from './EditCenterModal';
 import { DeleteCenterModal } from './DeleteCenterModal';
+import { useUser } from '../../services/useUser';
 
 export const Center = () => {
     const {
@@ -15,6 +16,7 @@ export const Center = () => {
         setCenter,
         deleteCenter,
     } = useCenter()
+    const { userLoggedIn } = useUser();
 
     const { id } = useParams();
     const [isOpenEditCenter, setIsOpenEditCenter] = useState(false);
@@ -89,10 +91,12 @@ export const Center = () => {
                                 </div>
                             </div>
                         </div>
-
                         <div className='text-center'>
                             <h1 className='font-bold text-xl'>{center.name}</h1>
                             <h3>{center.locality}({center.province})</h3>
+                        </div>
+                        <div>
+                            <h3 className='text-center text-lg'>Cartera: {userLoggedIn.wallet}€</h3>
                         </div>
                         {
                             center && (

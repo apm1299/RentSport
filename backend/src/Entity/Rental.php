@@ -10,36 +10,44 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RentalRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['Rental:read']],
+    denormalizationContext: ['groups' => ['Rental:write']],
+)]
 class Rental
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['RentalType:read'])]
     private $id;
 
     #[ORM\Column(type: 'datetime')]
-    #[Groups(['installation:read'])]
+    #[Groups(['Rental:read', 'Rental:write','installation:read'])]
     private $date;
 
     #[ORM\ManyToOne(targetEntity: Sport::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['Rental:read', 'Rental:write'])]
     private $sport;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['Rental:read', 'Rental:write'])]
     private $lessor;
 
     #[ORM\ManyToOne(targetEntity: Installation::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['Rental:read', 'Rental:write'])]
     private $installation;
 
     #[ORM\ManyToOne(targetEntity: RentalType::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['Rental:read', 'Rental:write'])]
     private $type;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['installation:read'])]
+    #[Groups(['Rental:read', 'Rental:write','installation:read'])]
     private $schedule;
 
     public function getId(): ?int

@@ -4,7 +4,7 @@ export const Header = () => {
     return (
         <>
             <div className="text-center">
-                <h2 className="text-3xl font-extrabold tracking-tight text-logo-400 text-shadow-lg sm:text-1xl">
+                <h2 className="text-2xl font-extrabold tracking-tight text-logo-400 text-shadow-md sm:text-1xl">
                     Regístrate en nuestra aplicación web y empieza a hacer deporte
                 </h2>
                 <p className="mt-4 text-lg leading-6 text-black text-shadow-md">

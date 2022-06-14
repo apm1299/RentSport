@@ -149,7 +149,6 @@ export const Form = ({
               }
             </div>
           </div>
-
           {/* Button submit and links */}
           <div className="sm:col-span-2">
             <button

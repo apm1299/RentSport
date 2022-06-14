@@ -27,10 +27,10 @@ export const DeleteCenterModal = ({
                                         <div className='w-full mr-1'>
                                             <button
                                                 type="button"
-                                                onClick={() => 
+                                                onClick={() => {
                                                     deleteCenter(center.id)
-                                                    
-                                                }
+                                                    setIsOpenDeleteCenter(false)
+                                                }}
                                                 className="block mx-auto w-full h-9 rounded bg-hardpurple-400 hover:bg-hardpurple-300 active:bg-hardpurple-300 text-white font-bold my-2 text-center"
                                             >
                                                 Confirmar

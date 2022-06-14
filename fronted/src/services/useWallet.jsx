@@ -1,10 +1,10 @@
 
 
-export const useSport = () => {
-
+export const useWallet = () => {
 
     //Actualizar Cartera
-    async function updateWallet(id, values) {
+    async function updateWallet(id, totalOrder) {
+        let data = {wallet: totalOrder};
         await fetch(`http://localhost:8000/api/users/${id}`, {
             method: 'PATCH',
             headers: {
@@ -12,7 +12,7 @@ export const useSport = () => {
                 'Content-Type': 'application/merge-patch+json'
             },
             credentials: 'include',
-            body: JSON.stringify(values, null, 2)
+            body: JSON.stringify(data, null, 2)
         }).then(response => response.json()
             .then(retrieved => {
 
