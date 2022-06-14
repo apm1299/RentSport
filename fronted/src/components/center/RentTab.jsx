@@ -4,6 +4,7 @@ import { Calendar } from "react-calendar";
 import styled from "styled-components";
 import { useInstallation } from "../../services/useInstallation";
 import { EditInstallation } from "./EditInstallation";
+import { PaymentModal } from "./PaymentModal";
 
 const CalendarContainer = styled.div`
   /* ~~~ container styles ~~~ */
@@ -93,6 +94,7 @@ export const RentTab = ({ center }) => {
     "sabado",
   ];
   const [isOpenEditInstallation, setIsOpenEditInstallation] = useState(false);
+  const [isOpenPayment, setIsOpenPayment] = useState(false);
 
   const [rentHoursSelected, setRentHoursSelected] = useState([]);
 
@@ -110,7 +112,7 @@ export const RentTab = ({ center }) => {
   const [installation, setInstallation] = useState(null);
   useEffect(() => {
     const callToGetCustomers = async () => {
-      setInstallation(await getInstallation(activeOptionInstallation));
+      setInstallation(await getInstallation(activeOptionInstallation.id));
     };
     callToGetCustomers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,8 +152,6 @@ export const RentTab = ({ center }) => {
     , [installation, dateCalendar]);
 
 
-  console.log(rentals)
-
   return (
     <>
       <EditInstallation
@@ -159,29 +159,46 @@ export const RentTab = ({ center }) => {
         isOpenEditInstallation={isOpenEditInstallation}
         activeOptionInstallation={activeOptionInstallation}
       />
+      {
+        activeOptionInstallation &&
+        <PaymentModal
+          isOpenPayment={isOpenPayment}
+          setIsOpenPayment={setIsOpenPayment}
+          rentHoursSelected={rentHoursSelected}
+          activeOptionInstallation={activeOptionInstallation}
+          dateCalendar={dateCalendar}
+          sports={sports}
+          activeOption={activeOption}
+        />
+      }
       <div>
         <div className="pt-6 w-10/12 mx-auto">
-          <h1 className="text-center font-bold text-xl">Calendario</h1>
-          <CalendarContainer>
-            <Calendar
-              onClickDay={(e) => {
-                //Comparar que el dia señalado sea mayor al actual
-                //if ( `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}` <=  `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`) {
+          <div className="border-2 border-hardpurple-100 shadow-xl py-4 rounded-xl">
+            <h1 className="text-center font-bold text-xl">Calendario</h1>
+            <CalendarContainer>
+              <Calendar
+                onClickDay={(e) => {
+                  //Comparar que el dia señalado sea mayor al actual
+                  //if ( `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}` <=  `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`) {
                   setDate(e.getDay());
                   setDateCalendar(
                     `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`
                   );
-                //}
-              }}
-            />
-          </CalendarContainer>
-          <div className="pt-6 w-10/12 mx-auto">
-            <h3 className="text-center font-semibold text-base">Dia : {dateCalendar}</h3>
-            <h1 className="text-center font-bold text-xl">SELECT DEPORTES</h1>
+                  //}
+                }}
+              />
+              <div className="shadow-2xl border-t" />
+            </CalendarContainer>
+            <h2 className="text-center font-semibold text-xl m-4">Dia para la reserva</h2>
+            <h2 className="text-center font-semibold text-xl mb-4">{dateCalendar}</h2>
+
+          </div>
+          <div className="pt-10 w-10/12 mx-auto">
+            <h2 className="font-semibold text-lg ">Deportes disponibles</h2>
             {sports?.length > 0 ? (
               <select
                 id="select-sports"
-                className="mt-8 bg-white py-3 px-4 block w-full shadow-sm border-2 border-softblue-800 rounded-md"
+                className=" bg-white py-3 px-4 block w-full shadow-sm border-2 border-softblue-800 rounded-md"
               >
                 <option
                   className="text-gray-500"
@@ -189,7 +206,7 @@ export const RentTab = ({ center }) => {
                   onClick={() => setActiveOption()}
                   value={0}
                 >
-                  Todos los deportes
+                  Selecciona un deporte
                 </option>
                 {sports.map((sport, idx) => (
                   <option
@@ -209,11 +226,11 @@ export const RentTab = ({ center }) => {
           </div>
           <div className="pt-6 w-10/12 mx-auto">
 
-            <h1 className="text-center font-bold text-xl">SELECT PISTA</h1>
+            <h1 className="font-semibold text-lg">Pistas disponibles</h1>
             {installationsSport.length > 0 ? (
               <select
                 id="select-project"
-                className="mt-8 bg-white py-3 px-4 block w-full shadow-sm border-2 border-softblue-800 rounded-md"
+                className=" bg-white py-3 px-4 block w-full shadow-sm border-2 border-softblue-800 rounded-md"
                 placeholder="Seleccione proyecto"
               >
                 <option className="text-gray-500" value={0}>
@@ -221,7 +238,7 @@ export const RentTab = ({ center }) => {
                 </option>
                 {installationsSport.map((installation, idx) => (
                   <option
-                    onClick={() => setActiveOptionInstallation(installation.id)}
+                    onClick={() => setActiveOptionInstallation(installation)}
                     key={`${installation.name}-${idx}`}
                     value={installation?.["@id"]}
                   >
@@ -236,18 +253,19 @@ export const RentTab = ({ center }) => {
             )}
           </div>
           <div className="pt-6 w-10/12 mx-auto">
-            <h1 className="text-center font-bold text-xl">HORAS DISPONIBLES</h1>
-            {installation && installation.schedule?.[days[date]]?.length > 0 ? (
+            <h1 className="font-semibold text-xl">{activeOptionInstallation ? `Horas de ${activeOptionInstallation.name}` : ''}</h1>
+            {installation && installation.schedule?.[days[date]]?.length > 0 && (
               <div className="block">
                 <div className="w-full gap-2 flex flex-col">
                   {installation.schedule[days[date]].map((section, idx) => (
                     <div
-                      className={`px-4 py-2 gap-2 flex justify-between  rounded-xl ${rentals.some(
+                      className={`px-4 py-2 gap-2 flex justify-between  rounded-xl shadow-lg ${rentals.some(
                         (r) => r.schedule === section.id
                       )
                         ? "bg-hardorange-100"
                         : "bg-hardpurple-100"
                         }`}
+
                       key={`${section.id}-${idx}`}
                     >
                       <div className="gap-1 flex flex-col flex-grow justify-center items-start">
@@ -280,16 +298,16 @@ export const RentTab = ({ center }) => {
                         ) : (
                           <button
                             className={`px-4 py-1 bg-hardpurple-400 hover:bg-hardpurple-300
-                        text-white rounded-2xl ${rentHoursSelected.some((e) => e === section.id)
+                        text-white rounded-2xl ${rentHoursSelected.some((e) => e === section)
                                 ? "ring ring-offset-2 ring-hardorange-400 bg-hardorange-200 hover:bg-hardorange-100 text-black"
                                 : ""
                               }`}
                             key={`${section.id}-${idx}`}
                             onClick={() =>
                               setRentHoursSelected((selected) =>
-                                selected.some((e) => e === section.id)
-                                  ? selected.filter((e) => e !== section.id)
-                                  : [...selected, section.id]
+                                selected.some((e) => e === section)
+                                  ? selected.filter((e) => e !== section)
+                                  : [...selected, section]
                               )
                             }
                           >
@@ -301,8 +319,10 @@ export const RentTab = ({ center }) => {
                       </div>
                     </div>
                   ))}
-                  <button className="mt-6 w-full bg-hardpurple-400 hover:bg-hardpurple-300 p-1 text-white rounded-2xl">
-                    Alquilar
+                  <button className="mt-6 w-full bg-hardpurple-400 hover:bg-hardpurple-300 p-1 text-white rounded-2xl"
+                    onClick={() => rentHoursSelected.length > 0 && setIsOpenPayment(true)}
+                  >
+                    Reservar
                   </button>
                   <button
                     className="mt-6 w-full bg-hardpurple-400 hover:bg-hardpurple-300 p-1 text-white rounded-2xl"
@@ -312,8 +332,6 @@ export const RentTab = ({ center }) => {
                   </button>
                 </div>
               </div>
-            ) : (
-              "No"
             )}
           </div>
         </div>

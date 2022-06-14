@@ -39,33 +39,33 @@ class AppFixtures extends Fixture
             'surnames' => 'Guardiola Lopez',
             'email' => 'pep@gmail.com',
             'emailVerify' => true,
-            'rol' => $superAdmin,
+            'userRoles' => [$superAdmin],
         ]);
         $cholo = UserFactory::new()->create([
             'name' => 'Cholo',
             'surnames' => 'Simeone',
             'email' => 'cholo@gmail.com',
             'emailVerify' => true,
-            'rol' => $admin,
+            'userRoles' => [$admin],
         ]);
         $chola = UserFactory::new()->create([
             'name' => 'Chola',
             'surnames' => 'Simeona',
             'email' => 'chola@gmail.com',
             'emailVerify' => true,
-            'rol' => $admin,
+            'userRoles' => [$admin],
         ]);
         $jose = UserFactory::new()->create([
             'name' => 'Jose',
             'surnames' => 'Mourinho Felix',
             'email' => 'maria@gmail.com',
             'emailVerify' => true,
-            'rol' => $user,
+            'userRoles' => [$user]
         ]);
 
         //CREACION DE USUARIOS Y TABLA N:M
         UserFactory::createMany(10, function()  use ($admin, $user) {
-            $item['rol'] = $user;
+            $item['userRoles'] = [$user];
 
             return $item;
         });
@@ -89,7 +89,7 @@ class AppFixtures extends Fixture
         CenterFactory::createMany(3, function()  use ($admin) {
             $item['userAdmin'] = UserFactory::new()->create([
                 'emailVerify' => true,
-                'rol' => $admin
+                'userRoles' => [$admin]
             ]);
             return $item;
         });

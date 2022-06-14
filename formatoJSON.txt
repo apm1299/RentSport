@@ -3,52 +3,6 @@
 
 
 
-
-
-[{"lunes": {"startAt": "10:00", "endAt": "11:00"},{"startAt": "11:00", "endAt": "12:00"},{"startAt": "12:00", "endAt": "13:00"},{"startAt": "13:00", "endAt": "14:00"}},{"martes": {"startAt": "11:00", "endAt": "12:00"},{"startAt": "12:00", "endAt": "13:00"}}]
-
-
-
-
-
-[{id: 1, value: {"startAt": "10:00", "endAt": "11:00"},{"startAt": "11:00", "endAt": "12:00"}},{id: 2, value: {"startAt": "10:00", "endAt": "11:00"},{"startAt": "11:00", "endAt": "12:00"}}]
-
-
-
-[{"lunes": {"rentTime": {"startAt": "10:00", "endAt": "11:00"},"rentTime": {"startAt": "11:00", "endAt": "12:00"},"rentTime": {"startAt": "12:00", "endAt": "13:00"},"rentTime": {"startAt": "13:00", "endAt": "14:00"}}},{"martes": {"rentTime": {"startAt": "10:00", "endAt": "11:00"},"rentTime": {"startAt": "11:00", "endAt": "12:00"}}}]
-
-
-
-
-
-{
-  "lunes": [
-    {
-      "id": "8931723",
-      "startAt": "10:00",
-      "endAt": "11:00"
-    },
-    {
-      "id": "9889u812",
-      "startAt": "11:00",
-      "endAt": "12:00"
-    }
-  ],
-  "martes": [
-    {
-      "id": "89sdf",
-      "startAt": "11:00",
-      "endAt": "12:00"
-    }
-  ]
-}
-
-
-
-
-
-
-
 {
   "lunes": [
     {
@@ -107,6 +61,162 @@
       "id": "fw32df",
       "startAt": "12:00",
       "endAt": "13:00"
+    },
+    {
+      "id": "f43v3fef",
+      "startAt": "13:00",
+      "endAt": "14:00"
+    },
+    {
+      "id": "4reg5fef",
+      "startAt": "17:00",
+      "endAt": "18:00"
+    },
+    {
+      "id": "2d3dwdf",
+      "startAt": "18:00",
+      "endAt": "19:00"
+    },
+    {
+      "id": "234fsdfer",
+      "startAt": "19:00",
+      "endAt": "20:00"
+    },
+    {
+      "id": "fcwefsdf3",
+      "startAt": "20:00",
+      "endAt": "21:00"
+    },
+    {
+      "id": "saf3wfdqewd",
+      "startAt": "21:00",
+      "endAt": "22:00"
+    }
+  ],
+  "miercoles": [
+    {
+      "id": "ergvsed3d",
+      "startAt": "11:00",
+      "endAt": "12:00"
+    },
+    {
+      "id": "f34edwerf",
+      "startAt": "12:00",
+      "endAt": "13:00"
+    },
+    {
+      "id": "wrferfce",
+      "startAt": "13:00",
+      "endAt": "14:00"
+    },
+    {
+      "id": "rgefwf3wc",
+      "startAt": "17:00",
+      "endAt": "18:00"
+    },
+    {
+      "id": "ves4t3frf",
+      "startAt": "18:00",
+      "endAt": "19:00"
+    },
+    {
+      "id": "ctrbvdr5yf",
+      "startAt": "19:00",
+      "endAt": "20:00"
+    },
+    {
+      "id": "trh45hr",
+      "startAt": "20:00",
+      "endAt": "21:00"
+    },
+    {
+      "id": "wfwefr4",
+      "startAt": "21:00",
+      "endAt": "22:00"
+    }
+  ],
+  "jueves": [
+    {
+      "id": "evervcert3",
+      "startAt": "11:00",
+      "endAt": "12:00"
+    },
+    {
+      "id": "csedevr3",
+      "startAt": "12:00",
+      "endAt": "13:00"
+    },
+    {
+      "id": "56jgfbg",
+      "startAt": "13:00",
+      "endAt": "14:00"
+    },
+    {
+      "id": "b56jrttg",
+      "startAt": "17:00",
+      "endAt": "18:00"
+    },
+    {
+      "id": "ve45g4rv",
+      "startAt": "18:00",
+      "endAt": "19:00"
+    },
+    {
+      "id": "evrd5gerg",
+      "startAt": "19:00",
+      "endAt": "20:00"
+    },
+    {
+      "id": "w34gferfr",
+      "startAt": "20:00",
+      "endAt": "21:00"
+    },
+    {
+      "id": "vs43hw4fr",
+      "startAt": "21:00",
+      "endAt": "22:00"
+    }
+  ],
+  "viernes": [
+    {
+      "id": "etrvbdfvr",
+      "startAt": "11:00",
+      "endAt": "12:00"
+    },
+    {
+      "id": "vr5grfgr",
+      "startAt": "12:00",
+      "endAt": "13:00"
+    },
+    {
+      "id": "46hsvrfd",
+      "startAt": "13:00",
+      "endAt": "14:00"
+    },
+    {
+      "id": "13fef3qc",
+      "startAt": "17:00",
+      "endAt": "18:00"
+    },
+    {
+      "id": "e45grtgsegr",
+      "startAt": "18:00",
+      "endAt": "19:00"
+    },
+    {
+      "id": "56jrtbrtv",
+      "startAt": "19:00",
+      "endAt": "20:00"
+    },
+    {
+      "id": "6jtbfgb",
+      "startAt": "20:00",
+      "endAt": "21:00"
+    },
+    {
+      "id": "yhgrb5brt",
+      "startAt": "21:00",
+      "endAt": "22:00"
     }
   ]
 }

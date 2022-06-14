@@ -13,11 +13,13 @@ export const CenterContainer = ({
                         <div className='block'>
                             {centers.map((center, idx) => (
                                 <NavLink to={`/centro/${center.id}`} >
-                                    <div className='flex gap-4 ease-linear duration-300 hover:border-logo-500 border-2 border-gray-300 rounded p-4 my-4'
+                                    <div className=' flex gap-4 ease-linear duration-300 hover:border-logo-500 border-2 border-gray-300 rounded p-4 my-4'
                                         key={`${center.name}-${idx}`}
                                     >
                                         <div className='flex-none w-24 aspect-square pr-2 border-r-2 border-logo-500'>
-                                            <img src={notFound} alt={center.name} />
+                                            <img src={center.image ? center.image : 'https://www.sinrumbofijo.com/wp-content/uploads/2016/05/default-placeholder.png'}
+                                                alt={center.name}
+                                            />
                                         </div>
                                         <div>
                                             <h3 className='font-bold text-xl'>{center.name}</h3>

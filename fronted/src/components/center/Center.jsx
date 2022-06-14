@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useCenter } from '../../services/useCenter';
-import logo from '../../img/logo-color.png'
 import { MyTab } from './Tab'
 import { Spinner } from '../commons/Spinner';
 import { useParams } from 'react-router-dom';
 import { EditCenterModal } from './EditCenterModal';
+import { DeleteCenterModal } from './DeleteCenterModal';
 
 export const Center = () => {
     const {
@@ -12,11 +12,14 @@ export const Center = () => {
         isLoading,
         getCenter,
         setLoading,
-        setCenter
+        setCenter,
+        deleteCenter,
     } = useCenter()
 
     const { id } = useParams();
     const [isOpenEditCenter, setIsOpenEditCenter] = useState(false);
+    const [isOpenDeleteCenter, setIsOpenDeleteCenter] = useState(false);
+
 
     useEffect(() => {
         setLoading(true);
@@ -34,17 +37,29 @@ export const Center = () => {
 
     return (
         <>
+            <DeleteCenterModal
+                center={center}
+                isOpenDeleteCenter={isOpenDeleteCenter}
+                setIsOpenDeleteCenter={setIsOpenDeleteCenter}
+                deleteCenter={deleteCenter}
+            />
             <EditCenterModal
                 center={center}
+                setCenter={setCenter}
                 setIsOpenEditCenter={setIsOpenEditCenter}
                 isOpenEditCenter={isOpenEditCenter}
             />
             <div className='bg-hardpurple-100 '>
                 <div className='py-10 min-h-screen bg-gradient-to-b from-hardpurple-400 via-hardpurple-100 to-hardpurple-400'>
-                    <div className='py-10 w-10/12 mx-auto bg-white rounded-3xl border-4 border-logo-500'>
+                    <div className='py-10 w-10/12 mx-auto bg-gray-50 rounded-3xl border-4 border-logo-500'>
                         <div className='mx-auto flex'>
                             <div className='ease-linear duration-300 w-40 lg:w-52 xl:w-60 mx-auto '>
-                                <img className='pl-12 rounded-full mx-auto' src={logo} alt="logo-color" />
+                                <div className='pl-12'>
+                                <img className=' rounded-xl mx-auto'
+                                src={center.image ? center.image : 'https://www.sinrumbofijo.com/wp-content/uploads/2016/05/default-placeholder.png'} 
+                                alt="logo-color" 
+                                />
+                                </div>
                             </div>
                             <div className='float-right'>
                                 <div className=''>
@@ -53,6 +68,7 @@ export const Center = () => {
                                         viewBox="0 0 20 20"
                                         fill="currentColor"
                                         onClick={() => {
+                                            setIsOpenDeleteCenter(true)
                                         }}
                                     >
                                         <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />

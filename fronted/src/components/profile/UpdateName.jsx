@@ -10,9 +10,7 @@ export const UpdateName = ({
     setUserLoggedIn,
 }) => {
 
-    const {
-        showMessageSucess
-    } = FlagMessage()
+    const { showMessageSucess } = FlagMessage()
 
     const validation = Yup.object().shape({
         name: Yup.string().max(255).min(3).required("Se requiere minimo 3 caracteres"),
@@ -27,7 +25,7 @@ export const UpdateName = ({
             updateUser(userLoggedIn.id, values);
             changeData(0);
             setUserLoggedIn(userLoggedIn=>({...userLoggedIn, name:values.name}));
-            showMessageSucess();
+            showMessageSucess("Perfil actualizado");
         }
     });
     useEffect(() => {

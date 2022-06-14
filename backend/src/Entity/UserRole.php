@@ -26,13 +26,15 @@ class UserRole
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $description;
 
-    #[ORM\OneToMany(mappedBy: 'rol', targetEntity: User::class)]
+    
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'userRoles')]
     private $users;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -75,34 +77,5 @@ class UserRole
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setRol($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getRol() === $this) {
-                $user->setRol(null);
-            }
-        }
-
-        return $this;
-    }
 
 }

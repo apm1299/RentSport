@@ -27,7 +27,7 @@ export const UpdateEmail = ({
             updateUser(userLoggedIn.id, values);
             changeData(3);
             setUserLoggedIn(userLoggedIn=>({...userLoggedIn, email:values.email}));
-            showMessageSucess();
+            showMessageSucess("Perfil actualizado");
         }
     });
     useEffect(() => {

@@ -8,11 +8,11 @@ import { Uploader } from "uploader";
 import { useEffect } from 'react';
 import { FlagMessage } from "../commons/FlagMessage"
 
-function viewImage(cancel, newImg, userLoggedIn){
-    if(cancel===false){
+function viewImage(cancel, newImg, userLoggedIn) {
+    if (cancel === false) {
         document.getElementById('h2-image').src = newImg[0].fileUrl;
-    }else{
-        document.getElementById('h2-image').src = userLoggedIn.image;
+    } else {
+        document.getElementById('h2-image').src = userLoggedIn.image ? userLoggedIn.image : 'https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg';
     }
 }
 
@@ -29,12 +29,12 @@ export const UpdateImage = ({
     const [newImg, setNewImg] = useState([]);
     useEffect(() => {
         const callToGetProjectsUser = async () => {
-          formik.setFieldValue("image", newImg[0].fileUrl);
-          viewImage(false, newImg, userLoggedIn)
+            formik.setFieldValue("image", newImg[0].fileUrl);
+            viewImage(false, newImg, userLoggedIn)
         };
         callToGetProjectsUser();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [newImg]);
+    }, [newImg]);
 
     const validation = Yup.object().shape({
         image: Yup.string().max(255).min(3),
@@ -48,8 +48,8 @@ export const UpdateImage = ({
         onSubmit: (values) => {
             updateUser(userLoggedIn.id, values);
             changeDataImage(2);
-            setUserLoggedIn(userLoggedIn=>({...userLoggedIn, image:values.image}));
-            showMessageSucess();
+            setUserLoggedIn(userLoggedIn => ({ ...userLoggedIn, image: values.image }));
+            showMessageSucess("Perfil actualizado");
         }
     });
 
@@ -63,25 +63,25 @@ export const UpdateImage = ({
                 </div>
                 <div className='grow'>
                     <img id='h2-image'
-                        className='w-3/12 mx-auto'
-                        src={userLoggedIn.image ? userLoggedIn.image : 'https://i.pinimg.com/564x/c1/76/0c/c1760c132a99389e6e0e2c27c2c44b06.jpg'}
+                        className='w-32 h-32 mx-auto rounded-full border-solid border-2 border-logo-500'
+                        src={userLoggedIn.image ? userLoggedIn.image : 'https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg'}
                         alt=''
                     />
                     <div id='image' hidden>
-                    <UploadButton
-                        uploader={uploader}
-                        options={{ multi: false }}
-                        onComplete={(file) => setNewImg(file)}
-                    >
-                        {({ onClick }) => (
-                            <button
-                                className="w-full my-6 bg-logo-200 hover:bg-logo-400 ease-linear duration-300 py-1 px-2 rounded-3xl text-center"
-                                onClick={onClick}
-                            >
-                                Cambiar imagen
-                            </button>
-                        )}
-                    </UploadButton>
+                        <UploadButton
+                            uploader={uploader}
+                            options={{ multi: false }}
+                            onComplete={(file) => setNewImg(file)}
+                        >
+                            {({ onClick }) => (
+                                <button
+                                    className="w-full my-6 bg-logo-200 hover:bg-logo-400 ease-linear duration-300 py-1 px-2 rounded-3xl text-center"
+                                    onClick={onClick}
+                                >
+                                    Cambiar imagen
+                                </button>
+                            )}
+                        </UploadButton>
                     </div>
                 </div>
                 <div className='grow'>
@@ -108,7 +108,7 @@ export const UpdateImage = ({
                         strokeWidth="2"
                         onClick={() => {
                             changeDataImage(2)
-                            viewImage(true ,newImg, userLoggedIn)
+                            viewImage(true, newImg, userLoggedIn)
                         }}
                     >
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />

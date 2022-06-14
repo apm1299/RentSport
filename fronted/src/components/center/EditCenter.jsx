@@ -1,10 +1,34 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useCenter } from "../../services/useCenter";
+import { FlagMessage } from "../commons/FlagMessage"
+import { UploadButton } from "react-uploader";
+import { Uploader } from "uploader";
+import { useEffect, useState } from "react";
 
 export const EditCenter = ({
     center,
+    setCenter,
     setIsOpenEditCenter,
 }) => {
+
+    const uploader = new Uploader({
+        // Get production API keys from Upload.io
+        apiKey: "free",
+    });
+    const [newImg, setNewImg] = useState([]);
+    useEffect(() => {
+        const callToGetProjectsUser = async () => {
+            formik.setFieldValue("image", newImg[0].fileUrl);
+            document.getElementById("imageSrc").src = newImg[0].fileUrl;
+        };
+        callToGetProjectsUser();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [newImg]);
+
+    const { showMessageSucess } = FlagMessage()
+    const { updateCenter } = useCenter();
+
     const validation = Yup.object().shape({
         name: Yup.string()
             .max(255)
@@ -22,14 +46,19 @@ export const EditCenter = ({
 
     const formik = useFormik({
         initialValues: {
-            name: "",
-            locality: "",
-            province: "",
+            name: center.name,
+            locality: center.locality,
+            province: center.province,
+            image: "",
         },
         validationSchema: validation,
         onSubmit: (values) => {
-            //update(id, values);
-            formik.resetForm();
+            updateCenter(center.id, values);
+            setCenter(center => ({ ...center, name: values.name }));
+            setCenter(center => ({ ...center, locality: values.locality }));
+            setCenter(center => ({ ...center, province: values.province }));
+            setCenter(center => ({ ...center, image: values.image }));
+            showMessageSucess("Datos guardados");
         },
     });
 
@@ -54,7 +83,7 @@ export const EditCenter = ({
                             type="text"
                             id="name-center"
                             autoComplete="name-center"
-                            className="py-3 px-4 block w-full shadow-sm focus:ring-softblue-600 rounded-md border-2 border-softblue-800"
+                            className="outline-none py-3 px-4 block w-full shadow-sm focus:ring-softblue-600 rounded-md ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300"
                         />
                         {formik.getFieldMeta("name").error &&
                             formik.getFieldMeta("name").touched && (
@@ -79,7 +108,7 @@ export const EditCenter = ({
                             type="text"
                             id="province-center"
                             autoComplete="province-center"
-                            className="py-3 px-4 block w-full shadow-sm focus:ring-softblue-600 rounded-md border-2 border-softblue-800"
+                            className="outline-none py-3 px-4 block w-full shadow-sm focus:ring-softblue-600 rounded-md ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300"
                         />
                         {formik.getFieldMeta("province").error &&
                             formik.getFieldMeta("province").touched && (
@@ -104,7 +133,7 @@ export const EditCenter = ({
                             type="text"
                             id="locality-center"
                             autoComplete="locality-center"
-                            className="py-3 px-4 block w-full shadow-sm focus:ring-softblue-600 rounded-md border-2 border-softblue-800"
+                            className="outline-none py-3 px-4 block w-full shadow-sm focus:ring-softblue-600 rounded-md ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300"
                         />
                         {formik.getFieldMeta("locality").error &&
                             formik.getFieldMeta("locality").touched && (
@@ -112,6 +141,29 @@ export const EditCenter = ({
                                     {formik.getFieldMeta("locality").error}
                                 </div>
                             )}
+                    </div>
+                </div>
+                <div className="w-9/12 mx-auto mb-4">
+                    <img id='imageSrc'
+                        className='w-32 h-32 mx-auto rounded-full border-solid border-2 border-hardpurple-300 shadow-2xl'
+                        src={center.image ? center.image : 'https://www.sinrumbofijo.com/wp-content/uploads/2016/05/default-placeholder.png'}
+                        alt=''
+                    />
+                    <div id=''>
+                        <UploadButton
+                            uploader={uploader}
+                            options={{ multi: false }}
+                            onComplete={(file) => setNewImg(file)}
+                        >
+                            {({ onClick }) => (
+                                <button
+                                    className="py-1 px-2 my-6 w-full bg-hardpurple-200 hover:bg-hardpurple-300 ease-linear duration-300 rounded-lg text-center text-white text-base font-semibold shadow-2xl"
+                                    onClick={onClick}
+                                >
+                                    Cambiar imagen
+                                </button>
+                            )}
+                        </UploadButton>
                     </div>
                 </div>
                 <div>

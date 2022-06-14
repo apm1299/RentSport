@@ -47,7 +47,8 @@ final class UserFactory extends ModelFactory
             'surnames' => self::faker()->lastName(),
             'email' => self::faker()->email(),
             'emailVerify' => self::faker()->boolean(90),
-            'password' => $this->passwordHasher->hashPassword(new User(),'ninguna'),
+            'password' => $this->passwordHasher->hashPassword(new User(),'Ninguna123+'),
+            'wallet' => 0,
         ];
     }
     public function hashPassword(User $data, string $pass): string {

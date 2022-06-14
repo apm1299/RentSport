@@ -1,0 +1,34 @@
+# config/packages/lexik_jwt_authentication.yaml
+#DIVIDE LA COOKIE EN DOS PARTES 1 HP (PAYLOAD-GUARDA INFORMACION MENOS SENSIBLE) 2 JWTS ("FIRMA DE LA COOKIE")
+lexik_jwt_authentication:
+    secret_key: '%env(resolve:JWT_SECRET_KEY)%'
+    public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
+    pass_phrase: '%env(JWT_PASSPHRASE)%'
+    token_ttl: 3600
+
+#>only for jwt cookies
+    token_extractors:
+        split_cookie:
+            enabled: true
+            cookies:
+                - jwt_hp
+                - jwt_s
+    set_cookies:
+        jwt_hp:
+            lifetime: null
+            samesite: strict
+            path: /
+            domain: null
+            httpOnly: false
+            split:
+                - header
+                - payload
+        jwt_s:
+            lifetime: null
+            samesite: strict
+            path: /
+            domain: null
+            httpOnly: true
+            split:
+                - signature
+#<only for jwt cookies 

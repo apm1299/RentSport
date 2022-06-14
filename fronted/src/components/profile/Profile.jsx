@@ -6,6 +6,7 @@ import { UpdateEmail } from './UpdateEmail'
 import { UpdateImage } from './UpdateImage';
 import { ContainerUpdatePassword } from './ContainerUpdatePassword';
 import { Spinner } from '../commons/Spinner';
+import { AddMoneyWallet } from './AddMoneyWallet';
 
 export const Profile = () => {
     const {
@@ -63,8 +64,17 @@ export const Profile = () => {
                         }
                         {
                             userLoggedIn && (
+                                <AddMoneyWallet
+                                    updateUser={updateUser}
+                                    userLoggedIn={userLoggedIn}
+                                    setUserLoggedIn={setUserLoggedIn}
+                                />
+                            )
+                        }
+                        {
+                            userLoggedIn && (
                                 <ContainerUpdatePassword
-                                userLoggedIn={userLoggedIn}
+                                    userLoggedIn={userLoggedIn}
                                 />
                             )
                         }

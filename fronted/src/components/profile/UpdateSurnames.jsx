@@ -27,7 +27,7 @@ export const UpdateSurnames = ({
             updateUser(userLoggedIn.id, values);
             changeData(1);
             setUserLoggedIn(userLoggedIn=>({...userLoggedIn, surnames:values.surnames}));
-            showMessageSucess();
+            showMessageSucess("Perfil actualizado");
         }
     });
     useEffect(() => {

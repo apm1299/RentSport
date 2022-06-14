@@ -119,7 +119,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
               type="text"
               id="name"
               autoComplete="name"
-              className="py-3 px-4 block w-full shadow-sm focus:ring-softblue-600 rounded-md border-2 border-softblue-800"
+              className="outline-none py-3 px-4 block w-full shadow-sm rounded-md ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300"
             />
             {formik.getFieldMeta("name").error &&
               formik.getFieldMeta("name").touched && (
@@ -144,7 +144,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
               type="decimal"
               id="pricePerRange"
               autoComplete="pricePerRange"
-              className="py-3 px-4 block w-full shadow-sm focus:ring-softblue-600 rounded-md border-2 border-softblue-800"
+              className="outline-none py-3 px-4 block w-full shadow-sm rounded-md ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300"
             />
             {formik.getFieldMeta("pricePerRange").error &&
               formik.getFieldMeta("pricePerRange").touched && (
@@ -164,6 +164,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
           </label>
           {sports.length > 0 && (
             <CheckPicker data={sports}
+              className="outline-none ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300 rounded-md"
               block
               labelKey="name"
               valueKey="id"
@@ -209,7 +210,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
                             <div className="flex-grow">
                               <input
                                 type="time"
-                                className="w-full py-2 px-2 border"
+                                className="outline-none w-full py-2 px-2 border border-hardpurple-400"
                                 {...formik.getFieldProps(
                                   `schedule.${day}.${idx}.startAt`
                                 )}
@@ -218,7 +219,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
                             <div className="flex-grow">
                               <input
                                 type="time"
-                                className="w-full py-2 px-2 border"
+                                className="outline-none w-full py-2 px-2 border border-hardpurple-400"
                                 {...formik.getFieldProps(
                                   `schedule.${day}.${idx}.endAt`
                                 )}
@@ -272,9 +273,9 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
                         ]);
                       }}
                       type="button"
-                      className="px-2 py-1 bg-sky-300"
+                      className="px-2 py-1 bg-hardpurple-400 text-white text-sm font-semibold rounded "
                     >
-                      add range
+                      Añadir rango
                     </button>
                   </div>
                 </div>

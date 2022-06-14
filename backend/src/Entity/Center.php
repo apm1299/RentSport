@@ -43,13 +43,18 @@ class Center
     private $province;
 
     #[ORM\OneToOne(inversedBy: 'center', targetEntity: User::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['center:read'])]
+    #[ORM\JoinColumn]
+    #[Groups(['center:read', 'center:write'])]
     private $userAdmin;
 
     #[ORM\OneToMany(mappedBy: 'center', targetEntity: Installation::class)]
     #[ApiSubresource()]
+    #[Groups(['center:read', 'center:write'])]
     private $installations;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['center:read', 'center:write'])]
+    private $image;
 
     public function __construct()
     {
@@ -136,6 +141,24 @@ class Center
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     * @return User
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
         return $this;
     }
 

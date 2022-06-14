@@ -1,18 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useCenter } from '../../services/useCenter'
 import { Search } from './search/Search';
 import { ButtonDefault } from '../commons/ButtonDefault';
 import { CenterContainer } from '../center/CentersContainer';
+import { NewCenterModal } from './NewCenterModal';
+import { useAuth } from '../../services/useAuth';
+import { useUser } from '../../services/useUser';
 
 export const Home = () => {
 
-    const {
-        setSearch,
-        centers,
-    } = useCenter()
+    const { user } = useAuth();
+    const { setSearch, centers } = useCenter()
+    const [isOpenNewCenter, setIsOpenNewCenter] = useState(false);
+    const { users, setSearchUser } = useUser();
 
     return (
         <>
+            {user &&
+                <NewCenterModal
+                    user={user}
+                    users={users}
+                    setSearchUser={setSearchUser}
+                    isOpenNewCenter={isOpenNewCenter}
+                    setIsOpenNewCenter={setIsOpenNewCenter}
+                />
+            }
             <div className='bg-hardpurple-100 '>
                 <div className=' py-10 min-h-screen bg-gradient-to-b from-hardpurple-400 via-hardpurple-100 to-hardpurple-400'>
                     <div id="separate" className='block lg:flex '>
@@ -21,7 +33,13 @@ export const Home = () => {
                             <div className="flex items-center border-b-2 border-logo-300 mb-2">
                                 <h1 className="flex-1 text-xl italic font-medium">CENTROS DEPORTIVOS</h1>
                             </div>
-                            <ButtonDefault>Crear centro deportivo</ButtonDefault>
+                            <ButtonDefault
+                                onClick={() => {
+                                    setIsOpenNewCenter(true)
+                                }}
+                            >
+                                Crear centro deportivo
+                            </ButtonDefault>
                             <CenterContainer
                                 centers={centers}
                             />

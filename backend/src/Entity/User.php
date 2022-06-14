@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Filter\FullTextSearchFilter;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -18,6 +20,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['User:read']],
     denormalizationContext: ['groups' => ['User:write']],
 )]
+#[ApiFilter(FullTextSearchFilter::class, properties:[
+    "name" => "ipartial",
+    "surnames" => "ipartial",
+])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -51,23 +57,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['User:read', 'User:write'])]
     private $image;
 
+    #[ORM\Column(type: 'float', precision: 10, scale: 2)]
+    #[Groups(['User:read', 'User:write'])]
+    private $wallet;
+
     #[ORM\OneToOne(mappedBy: 'userAdmin', targetEntity: Center::class, cascade: ['persist', 'remove'])]
     private $center;
 
     #[ORM\OneToMany(mappedBy: 'lessor', targetEntity: Rental::class)]
     private $rentals;
 
-    #[ORM\ManyToOne(targetEntity: UserRole::class, inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToMany(targetEntity: UserRole::class, inversedBy: 'users')]
+    #[ORM\JoinTable(name: "users_roles_rel")]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "role_id", referencedColumnName: "id")]
     #[Groups(['User:read', 'User:write'])]
-    private $rol;
+    private $userRoles;
 
     public function __construct()
     {
+        $this->userRoles = new ArrayCollection();
         $this->rentals = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -160,6 +173,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getWallet()
+    {
+        return $this->wallet;
+    }
+
+    /**
+     * @param mixed $wallet
+     * @return User
+     */
+    public function setWallet($wallet)
+    {
+        $this->wallet = $wallet;
+        return $this;
+    }
+
     public function getCenter(): ?Center
     {
         return $this->center;
@@ -207,24 +238,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRol(): ?UserRole
+    /**
+     * @return Collection<int, UserRole>
+     */
+    public function getUserRoles(): ?Collection
     {
-        return $this->rol;
+        return $this->userRoles;
     }
 
-    public function setRol(?UserRole $rol): self
+    public function addUserRole(UserRole $userRole): self
     {
-        $this->rol = $rol;
+
+        if (!$this->userRoles->contains($userRole)) {
+            $this->userRoles[] = $userRole;
+        }
 
         return $this;
     }
 
-    /**
+    public function removeUserRole(UserRole $userRole): self
+    {
+        $this->userRoles->removeElement($userRole);
+
+        return $this;
+    }
+
+
+
+     /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
      */
     public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function getUsername(): string
     {
         return (string) $this->email;
     }
@@ -240,9 +291,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        $rol[] = 'ROLE_USER';
+        $roles = array_map(fn (UserRole $role) => $role->getRole(), $this->userRoles->toArray());
+        $roles[] = 'ROLE_USER';
 
-        return $rol;
+        return array_unique($roles);
     }
 
 }

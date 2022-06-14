@@ -61,14 +61,70 @@ export const useCenter = () => {
         return center;
     }
 
+    //Crear centro
+    async function createCenter(values) {
+
+        const headers = new Headers();
+        headers.set("Accept", "application/ld+json");
+        headers.set("Content-Type", "application/ld+json")
+
+        await fetch('http://localhost:8000/api/centers', {
+            method: 'POST',
+            headers,
+            credentials: 'include',
+            body: JSON.stringify(values, null, 2),
+        }).then(response => response.json()
+            .then(retrieved => {
+                getCenters((projects) => [...projects, retrieved]);
+            }))
+            .catch(error => console.error(error))
+    }
+
+    //Actualizar centro
+    async function updateCenter(id, values) {
+        await fetch(`http://localhost:8000/api/centers/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/merge-patch+json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(values, null, 2)
+        }).then(response => response.json()
+            .then(retrieved => {
+
+            }))
+            .catch(error => console.error(error))
+    }
+    //Borrar tarea
+    async function deleteCenter(id) {
+        let headers = new Headers();
+        headers.set("Accept", "application/ld+json");
+        headers.set("Content-Type", "application/ld+json");
+        await global
+            .fetch(`http://localhost:8000/api/centers/${id}`, {
+                method: "DELETE",
+                headers,
+                credentials: "include",
+            })
+            .then(
+                (response) => setCenters((centers) => centers.filter((c) => c.id !== id)),
+                // setIsOpenDeleteTaskModal(false)
+            )
+            .catch((error) => console.error(error));
+    }
 
     return {
         getCenter,
         setSearch,
+        getCenters,
         centers,
         center,
         isLoading,
         setLoading,
         setCenter,
+        updateCenter,
+        deleteCenter,
+        createCenter
     }
 }
