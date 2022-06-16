@@ -2,18 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\RentalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+
 
 #[ORM\Entity(repositoryClass: RentalRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['Rental:read']],
     denormalizationContext: ['groups' => ['Rental:write']],
 )]
+#[ApiFilter(SearchFilter::class, properties: ['schedule' => 'exact'])]
 class Rental
 {
     #[ORM\Id]
@@ -33,7 +39,9 @@ class Rental
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['Rental:read', 'Rental:write'])]
+    #[Groups(['Rental:read', 'Rental:write', 'installation:read'])]
+    #[ApiSubresource()]
+    #[ApiProperty(readableLink:true)]
     private $lessor;
 
     #[ORM\ManyToOne(targetEntity: Installation::class, inversedBy: 'rentals')]
@@ -48,6 +56,7 @@ class Rental
 
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups(['Rental:read', 'Rental:write','installation:read'])]
+    #[ApiSubresource()]
     private $schedule;
 
     public function getId(): ?int

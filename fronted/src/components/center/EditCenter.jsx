@@ -49,7 +49,7 @@ export const EditCenter = ({
             name: center.name,
             locality: center.locality,
             province: center.province,
-            image: "",
+            image: center.image,
         },
         validationSchema: validation,
         onSubmit: (values) => {

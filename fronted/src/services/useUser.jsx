@@ -118,6 +118,24 @@ export const useUser = () => {
             .catch(error => console.error(error))
     }
 
+    async function getUserRent(section){
+        let user = [];
+        let headers = new Headers();
+        headers.set("Accept", "application/ld+json");
+        headers.set("Content-Type", "application/ld+json")
+        await global.fetch(`http://localhost:8000/api/rentals?schedule=${section.id}`, {
+            method: 'GET',
+            headers,
+            credentials: 'include',
+        }).then(response => response.json()
+            .then(async retrieved => {
+                user = await retrieved;
+            }))
+            .catch(error => console.error(error))
+
+        return user;
+    }
+
     return {
         createUser,
         updateUser,
@@ -125,6 +143,7 @@ export const useUser = () => {
         setUserLoggedIn,
         isLoading,
         users,
-        setSearchUser
+        setSearchUser,
+        getUserRent
     }
 }

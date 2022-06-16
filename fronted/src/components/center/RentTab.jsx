@@ -86,7 +86,7 @@ export const RentTab = ({ center }) => {
     getInstalationsSport,
   } = useInstallation();
 
-  const { userLoggedIn } = useUser();
+  const { userLoggedIn, getUserRent } = useUser();
 
   const days = [
     "domingo",
@@ -153,8 +153,7 @@ export const RentTab = ({ center }) => {
     }
     return [];
   }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    , [rentHoursSelected, installation, dateCalendar]);
+    , [installation, dateCalendar]);
 
 
   return (
@@ -286,25 +285,37 @@ export const RentTab = ({ center }) => {
                           <span>
                             <ClockOutline className="h-5 w-5 mt-0.5" />
                           </span>
-                          <span>Horario:</span>{" "}
+                          {" "}
                           <span>
                             {section.startAt} - {section.endAt}
                           </span>
+                          {
+                            rentals.some((r) => r.schedule === section.id) && (
+                              <span>
+                                {rentals.map((rent, idx) => (
+                                  section && rent.schedule === section.id && (
+                                    `${rent.lessor.name}  ${rent.lessor.surnames}`
+                                  )
+                                ))}
+                              </span>
+                            )
+                          }
                         </div>
                       </div>
                       <div className="flex items-center flex-none">
                         {rentals.some(
                           (r) => r.schedule === section.id
                         ) ? (
-                          <h3
+                          <button
+                          disabled
                             className="px-4 py-1 bg-hardorange-400
                           text-white rounded-2xl"
                           >
                             Ocupado
-                          </h3>
+                          </button>
                         ) : (
                           <button
-                            className={`px-4 py-1 bg-hardpurple-400 hover:bg-hardpurple-300
+                            className={`px-6 py-1 bg-hardpurple-400 hover:bg-hardpurple-300
                         text-white rounded-2xl ${rentHoursSelected.some((e) => e === section)
                                 ? "ring ring-offset-2 ring-hardorange-400 bg-hardorange-200 hover:bg-hardorange-100 text-black"
                                 : ""

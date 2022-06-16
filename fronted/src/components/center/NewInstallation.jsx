@@ -77,7 +77,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
     initialValues: {
       center: `/api/centers/${center.id}`,
       name: "",
-      sports: [`/api/sports/1`,`/api/sports/2`],
+      sports: [],
       schedule: {
         lunes: [],
         martes: [],
@@ -97,7 +97,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
   });
 
   //const [sportSelected, setSportSelected] = useState([]);
-  
+
   return (
     <>
       <div className="m-6 rounded-2xl bg-gray-200">
@@ -167,21 +167,12 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
               className="outline-none ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300 rounded-md"
               block
               labelKey="name"
-              valueKey="id"
+              valueKey="@id"
               sticky
-              // onChange={() =>
-              //   setSportSelected((selected) =>
-              //     selected.some((e) => e === section.id)
-              //       ? selected.filter((e) => e !== section.id)
-              //       : [...selected, section.id]
-              //   )
-              // }
+              onChange={(value) =>
+                formik.setFieldValue(`sports`, value)
+              }
 
-                // formik.setFieldValue(`sports`, [
-                //   ...formik.getFieldProps(`sports`).some((e) => e === )
-                //   ? selected.filter((e) => e !== section.id)
-                //                   : [...selected, section.id]
-                // ]);
             />
           )}
 

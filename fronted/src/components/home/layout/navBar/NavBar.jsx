@@ -4,6 +4,7 @@ import { MenuAlt1Icon, XIcon } from "@heroicons/react/solid"
 import { Fragment } from "react"
 import logo from '../../../../img/logo-con-nombre-ajustado-minuscula-rosa.png';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../../../services/useAuth';
 
 const navigation = [
     {
@@ -24,21 +25,14 @@ const navigation = [
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
     },
-    {
-        name: 'Salir',
-        href: '/entrar',
-        current: false,
-        icon:
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-    },
 ]
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 export const NavBar = () => {
+    const { logout } = useAuth();
+
     return (
         <>
             {/* Navbar */}
@@ -50,15 +44,15 @@ export const NavBar = () => {
                                 <div className="relative flex items-center justify-between h-16">
                                     {/* Logo section */}
                                     <NavLink to={`/`} >
-                                    <div className="flex items-center px-2 lg:px-0 xl:w-64">
-                                        <div className="flex-shrink-0 min-w-min">
-                                            <img
-                                                className="h-14 w-auto"
-                                                src={logo}
-                                                alt="Workflow"
-                                            />
+                                        <div className="flex items-center px-2 lg:px-0 xl:w-64">
+                                            <div className="flex-shrink-0 min-w-min">
+                                                <img
+                                                    className="h-14 w-auto"
+                                                    src={logo}
+                                                    alt="Workflow"
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
                                     </NavLink>
                                     <div className="flex lg:hidden">
                                         {/* Mobile menu button */}
@@ -88,6 +82,16 @@ export const NavBar = () => {
                                                         {item.icon}{item.name}
                                                     </a>
                                                 ))}
+                                                <button
+                                                    onClick={() => logout()}
+                                                    className="flex gap-1 px-3 py-2 rounded-md text-base font-semibold text-hardorange-300 hover:text-gray-400 hover:border-b-2 border-b-2 border-hardpurple-400 hover:border-hardorange-300"
+                                                    type='button'
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                                    </svg>
+                                                    Salir
+                                                </button>
                                             </div>
                                             {/* Profile dropdown */}
                                             <Menu as="div" className="ml-4 relative flex-shrink-0">
@@ -130,6 +134,16 @@ export const NavBar = () => {
                                             {item.icon}{item.name}
                                         </a>
                                     ))}
+                                    <button
+                                        onClick={() => logout()}
+                                        className="flex gap-1 px-3 py-2 rounded-md text-base font-semibold text-hardorange-300 hover:text-gray-400 hover:border-b-2 border-b-2 border-hardpurple-400 hover:border-hardorange-300"
+                                        type='button'
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
+                                        Salir
+                                    </button>
                                 </div>
 
                             </Disclosure.Panel>
