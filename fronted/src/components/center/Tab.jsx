@@ -2,6 +2,7 @@ import React from 'react'
 import { Tab } from '@headlessui/react'
 
 import { RentTab } from './RentTab';
+import { RentEvent } from './RentEvent';
 
 export const MyTab = ({
   center,
@@ -29,7 +30,11 @@ export const MyTab = ({
                   center={center}
                 />
               </Tab.Panel>
-              <Tab.Panel>Content 2</Tab.Panel>
+              <Tab.Panel>
+                <RentEvent
+                  center={center}
+                />
+               </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
         )

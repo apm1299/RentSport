@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { useRental } from '../../services/useRental';
 import { FlagMessage } from '../commons/FlagMessage';
 import { useWallet } from '../../services/useWallet';
+import { useAuth } from '../../services/useAuth';
 
 export const PaymentModal = ({
     isOpenPayment,
@@ -14,34 +15,39 @@ export const PaymentModal = ({
     sports,
     activeOption,
     userLoggedIn,
-    setRentHoursSelected
+    setRentHoursSelected,
+    rentals,
+    center
 }) => {
+    const { user } = useAuth();
     const { updateWallet } = useWallet();
     const { showMessageSucess, showMessageError } = FlagMessage()
     const { createRental } = useRental();
     const [activeOptionType, setActiveOptionType] = useState(1);
-    console.log(dateCalendar);
     const formik = useFormik({
         initialValues: {
-            sport: `api/sports/${activeOption}`,
+            sport: [],
             lessor: `api/users/${userLoggedIn.id}`,
-            installation: `api/installations/${activeOptionInstallation.id}`,
+            installation: [],
             type: `api/rental_types/${activeOptionType}`,
             date: "",
             schedule: "",
         },
-        onSubmit: (values) => { 
-            if(userLoggedIn.wallet - (activeOptionInstallation.pricePerRange * rentHoursSelected.length) >= 0 ){
-                for(let i=0; i<rentHoursSelected.length; i++){
+        onSubmit: (values) => {
+            if (userLoggedIn.wallet - (activeOptionInstallation.pricePerRange * rentHoursSelected.length) >= 0) {
+                for (let i = 0; i < rentHoursSelected.length; i++) {
                     values.schedule = rentHoursSelected[i].id;
                     values.date = dateCalendar;
-                    createRental(values)
+                    values.installation = `api/installations/${activeOptionInstallation.id}`;
+                    values.sport = `api/sports/${activeOption}`;
+
+                    createRental(values, rentals);
                 }
                 updateWallet(userLoggedIn.id, userLoggedIn.wallet - (activeOptionInstallation.pricePerRange * rentHoursSelected.length));
                 setRentHoursSelected([]);
                 setIsOpenPayment(false);
                 showMessageSucess("Pista alquilada");
-            }else{
+            } else {
                 showMessageError("Dinero insuficiente");
             }
         },
@@ -97,29 +103,34 @@ export const PaymentModal = ({
                                 <h3 className='flex gap-2 border-2 border-gray-300 rounded px-2 my-2 bg-slate-200'>
                                     {sports?.find((s) => s.id === activeOption)?.name}
                                 </h3>
-                                <h4>Tipo</h4>
-                                <select
-                                    id="select-type"
-                                    className=" bg-white py-3 px-2 block w-full shadow-sm border-2 border-gray-300 rounded-md"
-                                    placeholder="Selecciona tipo"
-                                >
-                                    <option className="text-gray-500" value={0}>
-                                        Selecciona tipo
-                                    </option>
-                                    <option
-                                        onClick={() => setActiveOptionType(1)}
-                                        value='1'
-                                    >
-                                        Normal
-                                    </option>
-                                    <option
-                                        onClick={() => setActiveOptionType(2)}
-                                        value='2'
-                                    >
-                                        Evento
-                                    </option>
-                                </select>
-                                {console.log(activeOptionInstallation)}
+                                {((center.userAdmin['id'] === user.id) ||
+                                    (user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
+                                        <h4>Tipo</h4>
+                                )}
+                                {((center.userAdmin['id'] === user.id) ||
+                                    (user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
+                                        <select
+                                            id="select-type"
+                                            className=" bg-white py-3 px-2 block w-full shadow-sm border-2 border-gray-300 rounded-md"
+                                            placeholder="Selecciona tipo"
+                                        >
+                                            <option className="text-gray-500" value={0}>
+                                                Selecciona tipo
+                                            </option>
+                                            <option
+                                                onClick={() => setActiveOptionType(1)}
+                                                value='1'
+                                            >
+                                                Normal
+                                            </option>
+                                            <option
+                                                onClick={() => setActiveOptionType(2)}
+                                                value='2'
+                                            >
+                                                Evento
+                                            </option>
+                                        </select>
+                                    )}
                                 <h4>Total Pago</h4>
                                 <h3 className='flex gap-2 border-2 border-gray-300 rounded px-2 my-2 bg-slate-200'>
                                     {activeOptionInstallation.pricePerRange * rentHoursSelected.length} €

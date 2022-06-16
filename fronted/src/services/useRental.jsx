@@ -2,7 +2,7 @@
 export const useRental = () => {
 
     //Crear alquiler
-    async function createRental(values) {
+    async function createRental(values, rentals) {
         const headers = new Headers();
         headers.set("Accept", "application/ld+json");
         headers.set("Content-Type", "application/ld+json")
@@ -14,7 +14,8 @@ export const useRental = () => {
             body: JSON.stringify(values, null, 2),
         }).then(response => response.json()
             .then(retrieved => {
-                //window.location.pathname = '/entrar';
+                rentals = [...rentals, retrieved];
+                
             }))
             .catch(error => console.error(error))
     }

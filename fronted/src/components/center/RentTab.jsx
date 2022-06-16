@@ -2,8 +2,10 @@ import { ClockOutline } from "heroicons-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { Calendar } from "react-calendar";
 import styled from "styled-components";
+import { useAuth } from "../../services/useAuth";
 import { useInstallation } from "../../services/useInstallation";
 import { useUser } from "../../services/useUser";
+import { FlagMessage } from "../commons/FlagMessage";
 import { EditInstallation } from "./EditInstallation";
 import { PaymentModal } from "./PaymentModal";
 
@@ -80,13 +82,10 @@ const CalendarContainer = styled.div`
 `;
 
 export const RentTab = ({ center }) => {
-  const {
-    //getRentDates,
-    getInstallation,
-    getInstalationsSport,
-  } = useInstallation();
-
-  const { userLoggedIn, getUserRent } = useUser();
+  const { getInstallation, getInstalationsSport } = useInstallation();
+  const { showMessageSucess, showMessageError } = FlagMessage()
+  const { user } = useAuth();
+  const { userLoggedIn } = useUser();
 
   const days = [
     "domingo",
@@ -143,7 +142,6 @@ export const RentTab = ({ center }) => {
     return [];
   }, [center.sports]);
 
-
   const rentals = useMemo(() => {
     if (installation) {
       return installation.rentals.filter(e => {
@@ -175,22 +173,26 @@ export const RentTab = ({ center }) => {
           activeOption={activeOption}
           userLoggedIn={userLoggedIn}
           setRentHoursSelected={setRentHoursSelected}
-        />
+          rentals={rentals}
+          center={center}
+          />
       }
       <div>
-        <div className="pt-6 w-10/12 mx-auto">
+        <div className="pt-6 w-10/12 mx-auto pb-12">
           <div className="border-2 border-hardpurple-100 shadow-xl py-4 rounded-xl">
             <h1 className="text-center font-bold text-xl">Calendario</h1>
             <CalendarContainer>
               <Calendar
                 onClickDay={(e) => {
                   //Comparar que el dia señalado sea mayor al actual
-                  //if ( `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}` <=  `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`) {
-                  setDate(e.getDay());
-                  setDateCalendar(
-                    `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`
-                  );
-                  //}
+                  if (`${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}` <= `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`) {
+                    setDate(e.getDay());
+                    setDateCalendar(
+                      `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`
+                    );
+                  } else {
+                    showMessageError("Fecha no valida");
+                  }
                 }}
               />
               <div className="shadow-2xl border-t" />
@@ -262,10 +264,10 @@ export const RentTab = ({ center }) => {
             <h1 className="font-semibold text-xl">{activeOptionInstallation ? `Horas de ${activeOptionInstallation.name}` : ''}</h1>
             {installation && installation.schedule?.[days[date]]?.length > 0 && (
               <div className="block">
-                <div className="w-full gap-2 flex flex-col">
+                <div className="w-full gap-2 flex flex-col ">
                   {installation.schedule[days[date]].map((section, idx) => (
                     <div
-                      className={`px-4 py-2 gap-2 flex justify-between  rounded-xl shadow-lg ${rentals.some(
+                      className={`h-24 px-4 py-1 gap-2 block sm:flex justify-between rounded-xl shadow-lg ease-linear duration-300 ${rentals.some(
                         (r) => r.schedule === section.id
                       )
                         ? "bg-hardorange-100"
@@ -277,11 +279,28 @@ export const RentTab = ({ center }) => {
                       <div className="gap-1 flex flex-col flex-grow justify-center items-start">
                         <div className="gap-1 flex items-center text-gray-900">
                           <span>
-                            Deporte:{" "}
-                            {sports?.find((s) => s.id === activeOption)?.name}
+                            
+                            {
+                             ((rentals.some((r) => r.schedule === section.id) && (center.userAdmin['id'] === user.id)) ||
+                             (rentals.some((r) => r.schedule === section.id) && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) ? (
+                                <span>
+                                  {rentals.map((rent, idx) => (
+                                    section && rent.schedule === section.id && (
+                                      `Deporte: ${rent.sport.name}`
+                                    )
+                                  ))}
+                                </span>
+                              ):(
+                                <span>
+                                  Deporte seleccionado: {sports?.find((s) => s.id === activeOption)?.name}
+                                </span>
+                              )
+                            }
                           </span>
                         </div>
                         <div className="gap-1 flex items-center text-gray-900">
+                          <div className="block">
+                          <div className="gap-1 flex ">
                           <span>
                             <ClockOutline className="h-5 w-5 mt-0.5" />
                           </span>
@@ -289,8 +308,11 @@ export const RentTab = ({ center }) => {
                           <span>
                             {section.startAt} - {section.endAt}
                           </span>
+                          </div>
+                          <div>
                           {
-                            rentals.some((r) => r.schedule === section.id) && (
+                            ((rentals.some((r) => r.schedule === section.id) && (center.userAdmin['id'] === user.id)) ||
+                              (rentals.some((r) => r.schedule === section.id) && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
                               <span>
                                 {rentals.map((rent, idx) => (
                                   section && rent.schedule === section.id && (
@@ -300,6 +322,8 @@ export const RentTab = ({ center }) => {
                               </span>
                             )
                           }
+                          </div>
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center flex-none">
@@ -307,7 +331,7 @@ export const RentTab = ({ center }) => {
                           (r) => r.schedule === section.id
                         ) ? (
                           <button
-                          disabled
+                            disabled
                             className="px-4 py-1 bg-hardorange-400
                           text-white rounded-2xl"
                           >
@@ -329,7 +353,7 @@ export const RentTab = ({ center }) => {
                               )
                             }
                           >
-                            {rentHoursSelected.find((r) => r === section.id)
+                            {rentHoursSelected.find((r) => r === section)
                               ? "Añadido"
                               : "Añadir"}
                           </button>

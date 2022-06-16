@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SportRepository::class)]
 #[ApiResource(
+    forceEager: false,
     normalizationContext: ['groups' => ['Sport:read']],
     denormalizationContext: ['groups' => ['Sport:write']],
 )]
@@ -26,7 +27,7 @@ class Sport
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups(['Sport:read', 'Sport:write'])]
+    #[Groups(['Sport:read', 'Sport:write','installation:read', 'Rental:read'])]
     private $name;
 
     #[ORM\OneToMany(mappedBy: 'sport', targetEntity: Rental::class)]

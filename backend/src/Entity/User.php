@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
+    forceEager: false,
     normalizationContext: ['groups' => ['User:read']],
     denormalizationContext: ['groups' => ['User:write']],
 )]
@@ -30,15 +31,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer', unique:true)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['User:read'])]
+    #[Groups(['User:read', 'center:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups(['User:read', 'User:write', 'Rental:read','installation:read'])]
+    #[Groups(['User:read', 'User:write', 'installation:read'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 50)]
-    #[Groups(['User:read', 'User:write', 'Rental:read','installation:read'])]
+    #[Groups(['User:read', 'User:write', 'installation:read'])]
     private $surnames;
 
     #[ORM\Column(type: 'string', length: 50)]

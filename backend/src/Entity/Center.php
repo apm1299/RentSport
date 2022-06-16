@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: "center")]
 #[ORM\Entity(repositoryClass: CenterRepository::class)]
 #[ApiResource(
+    forceEager: false,
     normalizationContext: ['groups' => ['center:read']],
     denormalizationContext: ['groups' => ['center:write']],
 )]
@@ -31,7 +32,7 @@ class Center
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups(['center:read', 'center:write'])]
+    #[Groups(['center:read', 'center:write', 'Rental:read'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 40)]
@@ -45,11 +46,13 @@ class Center
     #[ORM\OneToOne(inversedBy: 'center', targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn]
     #[Groups(['center:read', 'center:write'])]
+    #[ApiProperty(readableLink:true)]
     private $userAdmin;
 
     #[ORM\OneToMany(mappedBy: 'center', targetEntity: Installation::class)]
     #[ApiSubresource()]
-    #[Groups(['center:read', 'center:write'])]
+    #[Groups(['center:read', 'center:write', 'installation:read'])]
+    #[ApiProperty(readableLink:true)]
     private $installations;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

@@ -16,16 +16,17 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: RentalRepository::class)]
 #[ApiResource(
+    forceEager: false,
     normalizationContext: ['groups' => ['Rental:read']],
     denormalizationContext: ['groups' => ['Rental:write']],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['schedule' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['schedule' => 'exact', 'type.id' => 'exact', 'installation.center.id' => 'exact'])]
 class Rental
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['RentalType:read'])]
+    #[Groups(['Rental:read','RentalType:read'])]
     private $id;
 
     #[ORM\Column(type: 'datetime')]
@@ -34,7 +35,8 @@ class Rental
 
     #[ORM\ManyToOne(targetEntity: Sport::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['Rental:read', 'Rental:write'])]
+    #[Groups(['Rental:read', 'Rental:write', 'installation:read'])]
+    #[ApiProperty(readableLink:true)]
     private $sport;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rentals')]
@@ -46,12 +48,15 @@ class Rental
 
     #[ORM\ManyToOne(targetEntity: Installation::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['Rental:read', 'Rental:write'])]
+    #[Groups(['Rental:read', 'Rental:write', 'installation:read'])]
+        #[ApiProperty(readableLink:true)]
+
     private $installation;
 
     #[ORM\ManyToOne(targetEntity: RentalType::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['Rental:read', 'Rental:write'])]
+    #[ApiSubresource()]
     private $type;
 
     #[ORM\Column(type: 'string', nullable: true)]

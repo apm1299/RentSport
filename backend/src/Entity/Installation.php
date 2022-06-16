@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: "installation")]
 #[ORM\Entity(repositoryClass: InstallationRepository::class)]
 #[ApiResource(
+    forceEager: false,
     normalizationContext: ['groups' => ['installation:read']],
     denormalizationContext: ['groups' => ['installation:write']],
 )]
@@ -30,7 +31,7 @@ class Installation
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups(['installation:read','installation:write'])]
+    #[Groups(['installation:read','installation:write','Rental:read'])]
     private $name;
 
     #[ORM\Column(type: 'json')]
@@ -42,8 +43,11 @@ class Installation
     private $pricePerRange;
 
     #[ORM\ManyToOne(targetEntity: Center::class, inversedBy: 'installations')]
-    #[Groups(['installation:read','installation:write'])]
+    #[Groups(['installation:read','installation:write', 'Rental:read'])]
     #[ApiSubresource()]
+    #[ApiProperty(
+        readableLink: true
+    )]
     private $center;
 
     #[ORM\OneToMany(mappedBy: 'installation', targetEntity: Rental::class)]

@@ -1,6 +1,5 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
-import notFound from '../../img/logo-color.png';
 
 export const CenterContainer = ({
     centers,

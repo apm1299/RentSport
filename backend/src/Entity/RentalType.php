@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\RentalTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RentalTypeRepository::class)]
 #[ApiResource(
+    forceEager: false,
     normalizationContext: ['groups' => ['RentalType:read']],
     denormalizationContext: ['groups' => ['RentalType:write']],
 )]
@@ -28,6 +30,7 @@ class RentalType
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Rental::class)]
     #[Groups(['RentalType:read', 'RentalType:write'])]
+    #[ApiSubresource()]
     private $rentals;
 
     public function __construct()
