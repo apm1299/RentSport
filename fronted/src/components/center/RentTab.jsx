@@ -156,11 +156,16 @@ export const RentTab = ({ center }) => {
 
   return (
     <>
-      <EditInstallation
-        setIsOpenEditInstallation={setIsOpenEditInstallation}
-        isOpenEditInstallation={isOpenEditInstallation}
-        activeOptionInstallation={activeOptionInstallation}
-      />
+      {
+        installation &&
+        <EditInstallation
+          setIsOpenEditInstallation={setIsOpenEditInstallation}
+          isOpenEditInstallation={isOpenEditInstallation}
+          installation={installation}
+          center={center}
+          setInstallation={setInstallation}
+        />
+      }
       {
         activeOptionInstallation && userLoggedIn &&
         <PaymentModal
@@ -175,7 +180,7 @@ export const RentTab = ({ center }) => {
           setRentHoursSelected={setRentHoursSelected}
           rentals={rentals}
           center={center}
-          />
+        />
       }
       <div>
         <div className="pt-6 w-10/12 mx-auto pb-12">
@@ -279,10 +284,10 @@ export const RentTab = ({ center }) => {
                       <div className="gap-1 flex flex-col flex-grow justify-center items-start">
                         <div className="gap-1 flex items-center text-gray-900">
                           <span>
-                            
+
                             {
-                             ((rentals.some((r) => r.schedule === section.id) && (center.userAdmin['id'] === user.id)) ||
-                             (rentals.some((r) => r.schedule === section.id) && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) ? (
+                              ((rentals.some((r) => r.schedule === section.id) && (center.userAdmin['id'] === user.id)) ||
+                                (rentals.some((r) => r.schedule === section.id) && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) ? (
                                 <span>
                                   {rentals.map((rent, idx) => (
                                     section && rent.schedule === section.id && (
@@ -290,7 +295,7 @@ export const RentTab = ({ center }) => {
                                     )
                                   ))}
                                 </span>
-                              ):(
+                              ) : (
                                 <span>
                                   Deporte seleccionado: {sports?.find((s) => s.id === activeOption)?.name}
                                 </span>
@@ -300,29 +305,29 @@ export const RentTab = ({ center }) => {
                         </div>
                         <div className="gap-1 flex items-center text-gray-900">
                           <div className="block">
-                          <div className="gap-1 flex ">
-                          <span>
-                            <ClockOutline className="h-5 w-5 mt-0.5" />
-                          </span>
-                          {" "}
-                          <span>
-                            {section.startAt} - {section.endAt}
-                          </span>
-                          </div>
-                          <div>
-                          {
-                            ((rentals.some((r) => r.schedule === section.id) && (center.userAdmin['id'] === user.id)) ||
-                              (rentals.some((r) => r.schedule === section.id) && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
+                            <div className="gap-1 flex ">
                               <span>
-                                {rentals.map((rent, idx) => (
-                                  section && rent.schedule === section.id && (
-                                    `${rent.lessor.name}  ${rent.lessor.surnames}`
-                                  )
-                                ))}
+                                <ClockOutline className="h-5 w-5 mt-0.5" />
                               </span>
-                            )
-                          }
-                          </div>
+                              {" "}
+                              <span>
+                                {section.startAt} - {section.endAt}
+                              </span>
+                            </div>
+                            <div>
+                              {
+                                ((rentals.some((r) => r.schedule === section.id) && (center.userAdmin['id'] === user.id)) ||
+                                  (rentals.some((r) => r.schedule === section.id) && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
+                                  <span>
+                                    {rentals.map((rent, idx) => (
+                                      section && rent.schedule === section.id && (
+                                        `${rent.lessor.name}  ${rent.lessor.surnames}`
+                                      )
+                                    ))}
+                                  </span>
+                                )
+                              }
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -366,16 +371,22 @@ export const RentTab = ({ center }) => {
                   >
                     Reservar
                   </button>
-                  <button
-                    className="mt-6 w-full bg-hardpurple-400 hover:bg-hardpurple-300 p-1 text-white rounded-2xl"
-                    onClick={() => setIsOpenEditInstallation(true)}
-                  >
-                    Editar instalacion
-                  </button>
                 </div>
               </div>
             )}
           </div>
+          <div className="w-10/12 mx-auto">
+            {((installation && center.userAdmin['id'] === user.id) ||
+              (installation && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
+                <button
+                  className="mt-6 w-full bg-hardpurple-400 hover:bg-hardpurple-300 p-1 text-white rounded-2xl"
+                  onClick={() => setIsOpenEditInstallation(true)}
+                >
+                  Editar instalacion
+                </button>
+              )}
+          </div>
+
         </div>
       </div>
     </>

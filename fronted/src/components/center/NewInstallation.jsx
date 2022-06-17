@@ -6,9 +6,12 @@ import { CheckPicker, TagPicker } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import { useState } from "react";
 import { useInstallation } from "../../services/useInstallation";
+import { FlagMessage } from "../commons/FlagMessage"
+
 
 export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
 
+  const { showMessageSucess } = FlagMessage()
   const { createInstallation } = useInstallation();
   const { sports } = useSport();
 
@@ -91,8 +94,9 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
     },
     validationSchema: validation,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      //alert(JSON.stringify(values, null, 2));
       createInstallation(values);
+      showMessageSucess("Instalacion creada")
     },
   });
 
