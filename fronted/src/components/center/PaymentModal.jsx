@@ -5,6 +5,7 @@ import { useRental } from '../../services/useRental';
 import { FlagMessage } from '../commons/FlagMessage';
 import { useWallet } from '../../services/useWallet';
 import { useAuth } from '../../services/useAuth';
+import { useNavigate } from "react-router-dom";
 
 export const PaymentModal = ({
     isOpenPayment,
@@ -18,9 +19,8 @@ export const PaymentModal = ({
     setRentHoursSelected,
     rentals,
     center,
-    setFlag
 }) => {
-
+    let navigate = useNavigate();
     async function createRental(values) {
         const headers = new Headers();
         headers.set("Accept", "application/ld+json");
@@ -36,10 +36,7 @@ export const PaymentModal = ({
                 console.log(retrieved);
                 console.log(rentals);
                //rentals[rentals.length] = retrieved;
-              // rentals = [...rentals, retrieved];
-              setFlag(true);
-      
-                
+              // rentals = [...rentals, retrieved];      
             }))
             .catch(error => console.error(error))
       }
@@ -72,6 +69,7 @@ export const PaymentModal = ({
                 setRentHoursSelected([]);
                 setIsOpenPayment(false);
                 showMessageSucess("Pista alquilada");
+                navigate("/payment/success", { replace: true, state: {rent:values} });
             } else {
                 showMessageError("Dinero insuficiente");
             }

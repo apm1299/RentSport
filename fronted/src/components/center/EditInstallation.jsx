@@ -1,5 +1,5 @@
-import React from "react";
-import { useFormik } from "formik";
+import React, { useEffect } from "react";
+import { FormikContext, useFormik } from "formik";
 import * as Yup from "yup";
 import { useSport } from "../../services/useSport";
 import { CheckPicker } from "rsuite";
@@ -18,7 +18,7 @@ export const EditInstallation = ({
     const { editInstallation } = useInstallation();
     const { sports } = useSport();
     const { showMessageSucess } = FlagMessage()
-
+    
     const validateDay = Yup.array().of(
         Yup.object({
             id: Yup.string().required(),
@@ -99,7 +99,10 @@ export const EditInstallation = ({
             showMessageSucess("Datos guardados");
         },
     });
-
+    useEffect(() => {
+        formik.resetForm();
+    }, [installation])
+    
     return (
         <Transition
             show={isOpenEditInstallation}

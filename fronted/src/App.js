@@ -8,6 +8,7 @@ import { CenterPage } from "./pages/centerPage/CenterPage"
 import { RegisterPage } from './pages/register/RegisterPage'
 import { ProfilePage } from './pages/profilePage/ProfilePage'
 import { IncomePage } from './pages/incomePage/IncomePage'
+import { RentCorrentPage } from './pages/rentCorrect/RentCorrentPage'
 import AuthRoute from "./routes/AuthRoute";
 import { ProtectedRoute, RequireAuth } from "./routes";
 import './index.css';
@@ -37,6 +38,7 @@ function App() {
             <Route index element={< HomePage />}/>
             <Route path='/centro/:id' element={< CenterPage />}/>
             <Route path='/perfil' element={< ProfilePage />}/>
+            <Route path='/payment/success' element={< RentCorrentPage />}/>
             <Route
             path='/ingresos'
             element={

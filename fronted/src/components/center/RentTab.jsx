@@ -1,5 +1,5 @@
 import { ClockOutline } from "heroicons-react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Calendar } from "react-calendar";
 import styled from "styled-components";
 import { useAuth } from "../../services/useAuth";
@@ -157,32 +157,33 @@ export const RentTab = ({ center }) => {
     return [];
   }, [center.sports]);
 
-  const [flag, setFlag] = useState(false);
 
   const rentals = useMemo(() => {
-    if ((installation) || (installation && flag === true)) {
+    if (installation) {
       return installation.rentals.filter(e => {
         const date = new Date(e.date);
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` === dateCalendar;
       })
     }
-    setFlag(false)
-
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [installation, dateCalendar, flag]);
+  }, [installation, dateCalendar]);
+
+  const EditView = useCallback(() =>
+    <EditInstallation
+      key={installation.id}
+      setIsOpenEditInstallation={setIsOpenEditInstallation}
+      isOpenEditInstallation={isOpenEditInstallation}
+      installation={installation}
+      center={center}
+      setInstallation={setInstallation}
+    />, [installation, center, setInstallation, isOpenEditInstallation, setIsOpenEditInstallation])
 
   return (
     <>
       {
         installation && rentHoursSelected &&
-        <EditInstallation
-          setIsOpenEditInstallation={setIsOpenEditInstallation}
-          isOpenEditInstallation={isOpenEditInstallation}
-          installation={installation}
-          center={center}
-          setInstallation={setInstallation}
-        />
+        EditView()
       }
       {
         activeOptionInstallation && userLoggedIn &&
@@ -198,7 +199,6 @@ export const RentTab = ({ center }) => {
           setRentHoursSelected={setRentHoursSelected}
           rentals={rentals}
           center={center}
-          setFlag={setFlag}
         />
       }
       <div>
@@ -322,7 +322,7 @@ export const RentTab = ({ center }) => {
                                       `Deporte: ${rent.sport.name}`
                                     )
                                   ))}
-                                </span>                                
+                                </span>
                               ) : (
                                 <span>
                                   Deporte seleccionado: {sports?.find((s) => s.id === activeOption)?.name}
@@ -356,7 +356,7 @@ export const RentTab = ({ center }) => {
                                 ) : (
                                   <span>
                                     Precio: {installation.pricePerRange}€
-                                 </span>
+                                  </span>
                                 )
                               }
                             </div>
