@@ -7,6 +7,7 @@ import { Layout } from "./components/home/layout/Layout";
 import { CenterPage } from "./pages/centerPage/CenterPage"
 import { RegisterPage } from './pages/register/RegisterPage'
 import { ProfilePage } from './pages/profilePage/ProfilePage'
+import { IncomePage } from './pages/incomePage/IncomePage'
 import AuthRoute from "./routes/AuthRoute";
 import { ProtectedRoute, RequireAuth } from "./routes";
 import './index.css';
@@ -36,6 +37,14 @@ function App() {
             <Route index element={< HomePage />}/>
             <Route path='/centro/:id' element={< CenterPage />}/>
             <Route path='/perfil' element={< ProfilePage />}/>
+            <Route
+            path='/ingresos'
+            element={
+              <ProtectedRoute roles={['ROLE_ADMIN','ROLE_SUPERADMIN']}>
+                <IncomePage />
+              </ProtectedRoute>
+            }
+          />
           </Route>
 
           <Route path='*' element={< NotFoundPage />}></Route>

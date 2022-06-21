@@ -64,7 +64,6 @@ export const useAuth = () => {
       },
       allowOutsideClick: () => !Swal.isLoading(),
     }).then((result) => {
-      console.log(result);
       if (result.isConfirmed) {
         callBack();
       } else {

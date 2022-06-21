@@ -1,55 +1,55 @@
 import { useEffect, useState } from "react";
 
 
-export const useSport = () => {
+export const useIncome = () => {
 
-    const [sports, setSports] = useState([]);
-
+    const [incomes, setIncomes] = useState([]);
     useEffect(() => {
-        const callToGetSports = async () => {
-            setSports(await getSports());
+        const callToGetCenters = async () => {
+            setIncomes(await getIncomes());
         }
-        callToGetSports();
+        callToGetCenters();
     }, []);
 
-    async function getSports() {
-        let sports = [];
+    async function getIncomes() {
+
+        let incomes = [];
         let headers = new Headers();
         headers.set("Accept", "application/ld+json");
         headers.set("Content-Type", "application/ld+json")
-        await global.fetch(`http://localhost:8000/api/sports`, {
+        await global.fetch(`http://localhost:8000/api/incomes`, {
             method: 'GET',
             headers,
             credentials: 'include',
         }).then(response => response.json()
             .then(async retrieved => {
-                sports = await retrieved['hydra:member'];
+                incomes = await retrieved['hydra:member'];
             }))
             .catch(error => console.error(error))
-        return sports;
-    }
 
-    async function createSport(values) {
+        return incomes;
+    }
+    
+    async function createIncome(values) {
+        let datas = {userMade: values.userMade, date: values.date, quantity: values.quantity, userReceived: values.userReceived,};
 
         const headers = new Headers();
         headers.set("Accept", "application/ld+json");
         headers.set("Content-Type", "application/ld+json")
-
-        await fetch('http://localhost:8000/api/sports', {
+        await fetch('http://localhost:8000/api/incomes', {
             method: 'POST',
             headers,
             credentials: 'include',
-            body: JSON.stringify(values, null, 2),
+            body: JSON.stringify(datas, null, 2),
         }).then(response => response.json()
             .then(retrieved => {
-                setSports((sports) => [...sports, retrieved]);
+                setIncomes((incomes) => [retrieved, ...incomes]);
             }))
             .catch(error => console.error(error))
     }
 
-
     return {
-        sports,
-        createSport,
+        createIncome,
+        incomes,
     }
 }

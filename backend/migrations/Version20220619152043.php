@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220613105850 extends AbstractMigration
+final class Version20220619152043 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,13 +20,15 @@ final class Version20220613105850 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE "user" ADD wallet NUMERIC(10, 2) NOT NULL');
+        $this->addSql('ALTER TABLE "user" ALTER wallet TYPE NUMERIC(10, 2)');
+        $this->addSql('ALTER TABLE "user" ALTER wallet DROP DEFAULT');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('ALTER TABLE "user" DROP wallet');
+        $this->addSql('ALTER TABLE "user" ALTER wallet TYPE DOUBLE PRECISION');
+        $this->addSql('ALTER TABLE "user" ALTER wallet DROP DEFAULT');
     }
 }

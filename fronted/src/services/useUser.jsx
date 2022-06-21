@@ -75,7 +75,6 @@ export const useUser = () => {
           .then((response) =>
             response.json().then(async (retrieved) => {
               users = await retrieved["hydra:member"];
-              console.log(retrieved);
             })
           )
           .catch((error) => console.error(error));
@@ -96,7 +95,7 @@ export const useUser = () => {
             body: JSON.stringify(values, null, 2),
         }).then(response => response.json()
             .then(retrieved => {
-                window.location.pathname = '/entrar';
+                //window.location.pathname = '/entrar';
             }))
             .catch(error => console.error(error))
     }

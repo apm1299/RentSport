@@ -87,6 +87,21 @@ export const RentTab = ({ center }) => {
   const { user } = useAuth();
   const { userLoggedIn } = useUser();
 
+  const month = [
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre",
+  ];
+
   const days = [
     "domingo",
     "lunes",
@@ -114,21 +129,21 @@ export const RentTab = ({ center }) => {
 
   const [installation, setInstallation] = useState(null);
   useEffect(() => {
-    const callToGetCustomers = async () => {
+    const callToGetInstallation = async () => {
       setInstallation(await getInstallation(activeOptionInstallation.id));
     };
-    callToGetCustomers();
+    callToGetInstallation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeOptionInstallation]);
 
   const [installationsSport, setInstallationsSport] = useState([]);
   useEffect(() => {
-    const callToGetCustomers = async () => {
+    const callToGetSport = async () => {
       setInstallationsSport(
         await getInstalationsSport(center.id, activeOption)
       );
     };
-    callToGetCustomers();
+    callToGetSport();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeOption]);
 
@@ -142,22 +157,25 @@ export const RentTab = ({ center }) => {
     return [];
   }, [center.sports]);
 
+  const [flag, setFlag] = useState(false);
+
   const rentals = useMemo(() => {
-    if (installation) {
+    if ((installation) || (installation && flag === true)) {
       return installation.rentals.filter(e => {
         const date = new Date(e.date);
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` === dateCalendar;
       })
     }
-    return [];
-  }
-    , [installation, dateCalendar]);
+    setFlag(false)
 
+    return [];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [installation, dateCalendar, flag]);
 
   return (
     <>
       {
-        installation &&
+        installation && rentHoursSelected &&
         <EditInstallation
           setIsOpenEditInstallation={setIsOpenEditInstallation}
           isOpenEditInstallation={isOpenEditInstallation}
@@ -180,6 +198,7 @@ export const RentTab = ({ center }) => {
           setRentHoursSelected={setRentHoursSelected}
           rentals={rentals}
           center={center}
+          setFlag={setFlag}
         />
       }
       <div>
@@ -190,7 +209,8 @@ export const RentTab = ({ center }) => {
               <Calendar
                 onClickDay={(e) => {
                   //Comparar que el dia señalado sea mayor al actual
-                  if (`${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}` <= `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`) {
+                  if (new Date(`${today.getFullYear()} ${today.getMonth() + 1} ${today.getDate()}`) <= new Date(`${e.getFullYear()} ${e.getMonth() + 1} ${e.getDate()}`)) {
+                    //  ${today.getDate()})(`${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`) <= `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`) {
                     setDate(e.getDay());
                     setDateCalendar(
                       `${e.getFullYear()}-${e.getMonth() + 1}-${e.getDate()}`
@@ -203,8 +223,15 @@ export const RentTab = ({ center }) => {
               <div className="shadow-2xl border-t" />
             </CalendarContainer>
             <h2 className="text-center font-semibold text-xl m-4">Dia para la reserva</h2>
-            <h2 className="text-center font-semibold text-xl mb-4">{dateCalendar}</h2>
-
+            <h2 className="text-center font-semibold text-xl mb-4">
+              {
+                isNaN(dateCalendar.substr(5, 2)) ? (
+                  `${dateCalendar.substr(7, 2)} de ${month[Number(dateCalendar.substr(5, 1)) - 1]} del ${dateCalendar.substr(0, 4)}`
+                ) : (
+                  `${dateCalendar.substr(8, 2)} de ${month[Number(dateCalendar.substr(5, 2)) - 1]} del ${dateCalendar.substr(0, 4)}`
+                )
+              }
+            </h2>
           </div>
           <div className="pt-10 w-10/12 mx-auto">
             <h2 className="font-semibold text-lg ">Deportes disponibles</h2>
@@ -267,12 +294,13 @@ export const RentTab = ({ center }) => {
           </div>
           <div className="pt-6 w-10/12 mx-auto">
             <h1 className="font-semibold text-xl">{activeOptionInstallation ? `Horas de ${activeOptionInstallation.name}` : ''}</h1>
-            {installation && installation.schedule?.[days[date]]?.length > 0 && (
+            {installation && installation.schedule?.[days[date]]?.length > 0 ? (
               <div className="block">
                 <div className="w-full gap-2 flex flex-col ">
                   {installation.schedule[days[date]].map((section, idx) => (
+
                     <div
-                      className={`h-24 px-4 py-1 gap-2 block sm:flex justify-between rounded-xl shadow-lg ease-linear duration-300 ${rentals.some(
+                      className={`h-28 sm:h-28  px-4 py-1 gap-2 block sm:flex justify-between rounded-xl shadow-lg ease-linear duration-300 ${rentals.some(
                         (r) => r.schedule === section.id
                       )
                         ? "bg-hardorange-100"
@@ -294,7 +322,7 @@ export const RentTab = ({ center }) => {
                                       `Deporte: ${rent.sport.name}`
                                     )
                                   ))}
-                                </span>
+                                </span>                                
                               ) : (
                                 <span>
                                   Deporte seleccionado: {sports?.find((s) => s.id === activeOption)?.name}
@@ -317,7 +345,7 @@ export const RentTab = ({ center }) => {
                             <div>
                               {
                                 ((rentals.some((r) => r.schedule === section.id) && (center.userAdmin['id'] === user.id)) ||
-                                  (rentals.some((r) => r.schedule === section.id) && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
+                                  (rentals.some((r) => r.schedule === section.id) && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) ? (
                                   <span>
                                     {rentals.map((rent, idx) => (
                                       section && rent.schedule === section.id && (
@@ -325,6 +353,10 @@ export const RentTab = ({ center }) => {
                                       )
                                     ))}
                                   </span>
+                                ) : (
+                                  <span>
+                                    Precio: {installation.pricePerRange}€
+                                 </span>
                                 )
                               }
                             </div>
@@ -372,6 +404,10 @@ export const RentTab = ({ center }) => {
                     Reservar
                   </button>
                 </div>
+              </div>
+            ) : installation && installation.schedule?.[days[date]]?.length <= 0 && (
+              <div className=" px-4 py-4 gap-2 block sm:flex justify-between rounded-xl shadow-lg ease-linear duration-300 bg-hardpurple-100">
+                <p className="font-medium text-base">No disponible este dia</p>
               </div>
             )}
           </div>

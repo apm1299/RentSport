@@ -32,7 +32,6 @@ export const useInstallation = () => {
             }).then(response => response.json()
                 .then(async retrieved => {
                     installation = await retrieved;
-                    console.log(retrieved);
                 }))
                 .catch(error => console.error(error))
         }

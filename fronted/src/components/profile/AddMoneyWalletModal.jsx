@@ -33,7 +33,6 @@ export const AddMoneyWalletModal = ({
         useEffect(() => {
             const callToGetAddMoneyWallet = async () => {
                 let sum = Number(moneyWallet) + Number(userLoggedIn.wallet);
-                console.log(sum);
                 formik.setFieldValue("wallet",sum);
             };
             callToGetAddMoneyWallet();

@@ -2,7 +2,7 @@ import React from 'react'
 import { Tab } from '@headlessui/react'
 
 import { RentTab } from './RentTab';
-import { RentEvent } from './RentEvent';
+import { EventTab } from './EventTab';
 
 export const MyTab = ({
   center,
@@ -14,13 +14,13 @@ export const MyTab = ({
         center && (
 
           <Tab.Group>
-            <Tab.List className={'w-6/12 mx-auto mt-4'}>
+            <Tab.List className={'w-5/12 mx-auto mt-4'}>
               <Tab className={({ selected }) =>
-                selected ? 'ease-linear duration-300 w-6/12 bg-logo-500 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl' : 'w-6/12 bg-logo-400 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl'}>
+                selected ? 'outline-none ease-linear duration-300 w-6/12 border-b-4 border-logo-400 h-8 text-logo-400 font-bold rounded-3xl' : 'outline-none ease-linear duration-300 w-6/12 border-b-4 border-logo-200 h-8 text-logo-400 font-bold rounded-3xl'}>
                 Alquilar
               </Tab>
               <Tab className={({ selected }) =>
-                selected ? 'ease-linear duration-300 w-6/12 bg-logo-500 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl' : 'w-6/12 bg-logo-400 hover:bg-logo-400 h-8 text-white font-bold rounded-3xl'}>
+                selected ? 'outline-none ease-linear duration-300 w-6/12 border-b-4 border-logo-400 h-8 text-logo-400 font-bold rounded-3xl' : 'outline-none ease-linear duration-300 w-6/12 border-b-4 border-logo-200 h-8 text-logo-400 font-bold rounded-3xl'}>
                 Eventos
               </Tab>
             </Tab.List>
@@ -31,7 +31,7 @@ export const MyTab = ({
                 />
               </Tab.Panel>
               <Tab.Panel>
-                <RentEvent
+                <EventTab
                   center={center}
                 />
                </Tab.Panel>

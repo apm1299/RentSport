@@ -62,7 +62,7 @@ export const Profile = () => {
                                 />
                             )
                         }
-                        {
+                        {/* {
                             userLoggedIn && (
                                 <AddMoneyWallet
                                     updateUser={updateUser}
@@ -70,7 +70,7 @@ export const Profile = () => {
                                     setUserLoggedIn={setUserLoggedIn}
                                 />
                             )
-                        }
+                        } */}
                         {
                             userLoggedIn && (
                                 <ContainerUpdatePassword

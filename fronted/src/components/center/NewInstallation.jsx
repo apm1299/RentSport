@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSport } from "../../services/useSport";
@@ -7,6 +7,7 @@ import "rsuite/dist/rsuite.min.css";
 import { useState } from "react";
 import { useInstallation } from "../../services/useInstallation";
 import { FlagMessage } from "../commons/FlagMessage"
+import { NewSport } from "./NewSport";
 
 
 export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
@@ -35,7 +36,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
           ? true
           : this.createError({
             path: `${this.path}`,
-            message: "Incorrect1",
+            message: `Las hora de comienzo debe de ser mayor que la ultima hora de fin y la hora de fin mayor que la hora de comienzo`,
           });
       } else {
         const endAtCondition = item.startAt < item.endAt;
@@ -44,7 +45,7 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
           ? true
           : this.createError({
             path: `${this.path}`,
-            message: "Incorrect2",
+            message: `La hora de fin debe ser mayor que ${item.startAt}`,
           });
       }
     })
@@ -149,6 +150,10 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
               id="pricePerRange"
               autoComplete="pricePerRange"
               className="outline-none py-3 px-4 block w-full shadow-sm rounded-md ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300"
+              onInput={(e) => {
+                const value = parseInt(e.target.value);
+                e.target.value = value ? value : null
+              }}
             />
             {formik.getFieldMeta("pricePerRange").error &&
               formik.getFieldMeta("pricePerRange").touched && (
@@ -166,20 +171,25 @@ export const NewInstallation = ({ center, setIsOpenEditCenter }) => {
           >
             Deportes disponibles
           </label>
-          {sports.length > 0 && (
-            <CheckPicker data={sports}
-              className="outline-none ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300 rounded-md"
-              block
-              labelKey="name"
-              valueKey="@id"
-              sticky
-              onChange={(value) =>
-                formik.setFieldValue(`sports`, value)
-              }
-
-            />
-          )}
-
+          <div className="flex">
+            <div className="w-8/12">
+              {sports && sports.length > 0 && (
+                <CheckPicker data={sports}
+                  className="outline-none ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300 rounded-md"
+                  block
+                  labelKey="name"
+                  valueKey="@id"
+                  sticky
+                  onChange={(value) =>
+                    formik.setFieldValue(`sports`, value)
+                  }
+                />
+              )}
+            </div>
+            <div className="w-4/12 ">
+              <NewSport />
+            </div>
+          </div>
         </div>
 
         <div className="w-9/12 mx-auto py-2">

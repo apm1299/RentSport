@@ -17,19 +17,44 @@ export const PaymentModal = ({
     userLoggedIn,
     setRentHoursSelected,
     rentals,
-    center
+    center,
+    setFlag
 }) => {
+
+    async function createRental(values) {
+        const headers = new Headers();
+        headers.set("Accept", "application/ld+json");
+        headers.set("Content-Type", "application/ld+json")
+      
+        await fetch('http://localhost:8000/api/rentals', {
+            method: 'POST',
+            headers,
+            credentials: 'include',
+            body: JSON.stringify(values, null, 2),
+        }).then(response => response.json()
+            .then(retrieved => {
+                console.log(retrieved);
+                console.log(rentals);
+               //rentals[rentals.length] = retrieved;
+              // rentals = [...rentals, retrieved];
+              setFlag(true);
+      
+                
+            }))
+            .catch(error => console.error(error))
+      }
+
     const { user } = useAuth();
-    const { updateWallet } = useWallet();
+    const { collectionMoney } = useWallet();
     const { showMessageSucess, showMessageError } = FlagMessage()
-    const { createRental } = useRental();
+    //const {  } = useRental();
     const [activeOptionType, setActiveOptionType] = useState(1);
     const formik = useFormik({
         initialValues: {
             sport: [],
             lessor: `api/users/${userLoggedIn.id}`,
             installation: [],
-            type: `api/rental_types/${activeOptionType}`,
+            type: "",
             date: "",
             schedule: "",
         },
@@ -40,10 +65,10 @@ export const PaymentModal = ({
                     values.date = dateCalendar;
                     values.installation = `api/installations/${activeOptionInstallation.id}`;
                     values.sport = `api/sports/${activeOption}`;
-
+                    values.type = `api/rental_types/${activeOptionType}`;
                     createRental(values, rentals);
                 }
-                updateWallet(userLoggedIn.id, userLoggedIn.wallet - (activeOptionInstallation.pricePerRange * rentHoursSelected.length));
+                collectionMoney(userLoggedIn.id, Number(userLoggedIn.wallet) - Number((activeOptionInstallation.pricePerRange * rentHoursSelected.length)));
                 setRentHoursSelected([]);
                 setIsOpenPayment(false);
                 showMessageSucess("Pista alquilada");
@@ -106,7 +131,7 @@ export const PaymentModal = ({
                                 {((center.userAdmin['id'] === user.id) ||
                                     (user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
                                         <h4>Tipo</h4>
-                                )}
+                                    )}
                                 {((center.userAdmin['id'] === user.id) ||
                                     (user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) && (
                                         <select

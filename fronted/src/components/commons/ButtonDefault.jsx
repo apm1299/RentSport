@@ -6,7 +6,7 @@ duration-300
 h-9
 rounded
 bg-logo-500
-hover:bg-hardorange-500
+hover:bg-logo-400
 w-full
 xl:w-4/12
 2xl:w-3/12

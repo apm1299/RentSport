@@ -26,31 +26,30 @@ class Rental
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['Rental:read','RentalType:read'])]
+    #[Groups(['Rental:read', 'RentalType:read'])]
     private $id;
 
     #[ORM\Column(type: 'datetime')]
-    #[Groups(['Rental:read', 'Rental:write','installation:read'])]
+    #[Groups(['Rental:read', 'Rental:write', 'installation:read'])]
     private $date;
 
     #[ORM\ManyToOne(targetEntity: Sport::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['Rental:read', 'Rental:write', 'installation:read'])]
-    #[ApiProperty(readableLink:true)]
+    #[ApiProperty(readableLink: true)]
     private $sport;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['Rental:read', 'Rental:write', 'installation:read'])]
     #[ApiSubresource()]
-    #[ApiProperty(readableLink:true)]
+    #[ApiProperty(readableLink: true)]
     private $lessor;
 
     #[ORM\ManyToOne(targetEntity: Installation::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['Rental:read', 'Rental:write', 'installation:read'])]
-        #[ApiProperty(readableLink:true)]
-
+    #[ApiProperty(readableLink: true)]
     private $installation;
 
     #[ORM\ManyToOne(targetEntity: RentalType::class, inversedBy: 'rentals')]
@@ -60,7 +59,7 @@ class Rental
     private $type;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['Rental:read', 'Rental:write','installation:read'])]
+    #[Groups(['Rental:read', 'Rental:write', 'installation:read'])]
     #[ApiSubresource()]
     private $schedule;
 

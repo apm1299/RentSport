@@ -14,7 +14,9 @@ export const useRental = () => {
             body: JSON.stringify(values, null, 2),
         }).then(response => response.json()
             .then(retrieved => {
-                rentals = [...rentals, retrieved];
+               rentals = [...rentals, retrieved];
+              // setWorkers((workers) => [...workers, retrieved]);
+
                 
             }))
             .catch(error => console.error(error))

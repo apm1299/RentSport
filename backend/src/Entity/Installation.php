@@ -39,7 +39,10 @@ class Installation
     private $schedule = [];
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    #[Groups(['installation:read','installation:write'])]
+    #[Groups(['installation:read','installation:write','Rental:read'])]
+    #[ApiProperty(
+        readableLink: true
+    )]
     private $pricePerRange;
 
     #[ORM\ManyToOne(targetEntity: Center::class, inversedBy: 'installations')]
@@ -52,9 +55,7 @@ class Installation
 
     #[ORM\OneToMany(mappedBy: 'installation', targetEntity: Rental::class)]
     #[Groups(['installation:read','installation:write'])]
-    #[ApiProperty(
-        readableLink: true
-    )]
+    #[ApiProperty(readableLink: true)]
     private $rentals;
 
     #[ORM\ManyToMany(targetEntity: Sport::class, mappedBy: 'installations')]

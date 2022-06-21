@@ -35,11 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups(['User:read', 'User:write', 'installation:read'])]
+    #[Groups(['User:read', 'User:write', 'installation:read', 'Income:read'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 50)]
-    #[Groups(['User:read', 'User:write', 'installation:read'])]
+    #[Groups(['User:read', 'User:write', 'installation:read', 'Income:read'])]
     private $surnames;
 
     #[ORM\Column(type: 'string', length: 50)]
@@ -58,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['User:read', 'User:write'])]
     private $image;
 
-    #[ORM\Column(type: 'float', precision: 10, scale: 2)]
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     #[Groups(['User:read', 'User:write'])]
     private $wallet;
 
@@ -75,10 +75,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['User:read', 'User:write'])]
     private $userRoles;
 
+    #[ORM\OneToMany(mappedBy: 'userMade', targetEntity: Income::class)]
+    private $incomesMade;
+
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
         $this->rentals = new ArrayCollection();
+        $this->incomesMade = new ArrayCollection();
     }
 
     public function getId(): int
@@ -296,6 +301,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
+    }
+
+    /**
+     * @return Collection<int, Income>
+     */
+    public function getIncomesMade(): Collection
+    {
+        return $this->incomesMade;
+    }
+
+    public function addIncomesMade(Income $incomesMade): self
+    {
+        if (!$this->incomesMade->contains($incomesMade)) {
+            $this->incomesMade[] = $incomesMade;
+            $incomesMade->setUserMade($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIncomesMade(Income $incomesMade): self
+    {
+        if ($this->incomesMade->removeElement($incomesMade)) {
+            // set the owning side to null (unless already changed)
+            if ($incomesMade->getUserMade() === $this) {
+                $incomesMade->setUserMade(null);
+            }
+        }
+
+        return $this;
     }
 
 }

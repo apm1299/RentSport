@@ -19,12 +19,12 @@ export const Form = ({
       surnames: "",
       email: "",
       password: "",
-      rol: "/api/user_roles/3"
+      rol: "/api/user_roles/3",
+      wallet: 0
     },
 
     validationSchema: validation,
     onSubmit: async (values) => {
-      console.log(values)
       createUser(values);
       formik.resetForm();
     },

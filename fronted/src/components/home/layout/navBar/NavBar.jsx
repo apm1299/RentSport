@@ -5,6 +5,7 @@ import { Fragment } from "react"
 import logo from '../../../../img/logo-con-nombre-ajustado-minuscula-rosa.png';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../../../services/useAuth';
+import { useCenter } from '../../../../services/useCenter';
 
 const navigation = [
     {
@@ -14,7 +15,9 @@ const navigation = [
         icon:
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
+            </svg>,
+        type: 1
+
     },
     {
         name: 'Perfil',
@@ -23,7 +26,22 @@ const navigation = [
         icon:
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
+            </svg>,
+        type: 1
+    },
+    {
+        name: 'Ingresos',
+        href: '/ingresos',
+        current: false,
+        icon:
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>,
+        type: 3
+    },
+    {
+        name: 'Salir',
+        type: 2
     },
 ]
 
@@ -31,8 +49,8 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 export const NavBar = () => {
-    const { logout } = useAuth();
-
+    const { logout, user } = useAuth();
+    const { centers } = useCenter();
     return (
         <>
             {/* Navbar */}
@@ -73,25 +91,39 @@ export const NavBar = () => {
                                         <div className="flex items-center justify-end">
                                             <div className="flex">
                                                 {navigation.map((item) => (
-                                                    <a
-                                                        key={item.name}
-                                                        href={item.href}
-                                                        className="flex gap-1 px-3 py-2 rounded-md text-base font-semibold text-hardorange-300 hover:text-gray-400 hover:border-b-2 border-b-2 border-hardpurple-400 hover:border-hardorange-300"
-                                                        aria-current={item.current ? 'page' : undefined}
-                                                    >
-                                                        {item.icon}{item.name}
-                                                    </a>
+                                                    item.type === 1 ? (
+                                                        <a
+                                                            key={item.name}
+                                                            href={item.href}
+                                                            className="flex gap-1 px-3 py-2 rounded-md text-base font-semibold text-hardorange-300 hover:text-gray-400 hover:border-b-2 border-b-2 border-hardpurple-400 hover:border-hardorange-300"
+                                                            aria-current={item.current ? 'page' : undefined}
+                                                        >
+                                                            {item.icon}{item.name}
+                                                        </a>
+                                                    ) : item.type === 2 ? (
+                                                        <button
+                                                            onClick={() => logout()}
+                                                            className="flex gap-1 px-3 py-2 rounded-md text-base font-semibold text-hardorange-300 hover:text-gray-400 hover:border-b-2 border-b-2 border-hardpurple-400 hover:border-hardorange-300"
+                                                            type='button'
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                                            </svg>
+                                                            Salir
+                                                        </button>
+                                                    ) : ((centers.some((c) => c.userAdmin['id'] === user.id) && item.type === 3) ||
+                                                        (item.type === 3 && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) ? (
+                                                        <a
+                                                            key={item.name}
+                                                            href={item.href}
+                                                            className="flex gap-1 px-3 py-2 rounded-md text-base font-semibold text-hardorange-300 hover:text-gray-400 hover:border-b-2 border-b-2 border-hardpurple-400 hover:border-hardorange-300"
+                                                            aria-current={item.current ? 'page' : undefined}
+                                                        >
+                                                            {item.icon}{item.name}
+                                                        </a>
+                                                    ) : ('')
+
                                                 ))}
-                                                <button
-                                                    onClick={() => logout()}
-                                                    className="flex gap-1 px-3 py-2 rounded-md text-base font-semibold text-hardorange-300 hover:text-gray-400 hover:border-b-2 border-b-2 border-hardpurple-400 hover:border-hardorange-300"
-                                                    type='button'
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                                    </svg>
-                                                    Salir
-                                                </button>
                                             </div>
                                             {/* Profile dropdown */}
                                             <Menu as="div" className="ml-4 relative flex-shrink-0">
@@ -116,34 +148,57 @@ export const NavBar = () => {
                                     </div>
                                 </div>
                             </div>
-
                             <Disclosure.Panel className="lg:hidden">
                                 <div className="bg-hardpurple-400 px-2 pt-2 pb-3 space-y-1">
                                     {navigation.map((item) => (
-                                        <a
-                                            key={item.name}
-                                            href={item.href}
-                                            className={classNames(
-                                                item.current
-                                                    ? 'flex gap-1 text-white bg-logo-500'
-                                                    : 'flex gap-1 text-white hover:bg-hardpurple-300',
-                                                'block px-3 py-2 rounded-md text-base font-medium'
-                                            )}
-                                            aria-current={item.current ? 'page' : undefined}
-                                        >
-                                            {item.icon}{item.name}
-                                        </a>
+                                        item.type === 1 ? (
+                                            <a
+                                                key={item.name}
+                                                href={item.href}
+                                                className={classNames(
+                                                    item.current
+                                                        ? 'flex gap-1 text-white bg-logo-500'
+                                                        : 'flex gap-1 text-white hover:bg-hardpurple-300',
+                                                    'block px-3 py-2 rounded-md text-base font-medium'
+                                                )}
+                                                aria-current={item.current ? 'page' : undefined}
+                                            >
+                                                {item.icon}{item.name}
+                                            </a>
+                                        ) : item.type === 2 ? (
+                                            <button
+                                                onClick={() => logout()}
+                                                className={classNames(
+                                                    item.current
+                                                        ? ' flex gap-1 text-white bg-logo-500'
+                                                        : 'w-full flex gap-1 text-white hover:bg-hardpurple-300',
+                                                    'block px-3 py-2 rounded-md text-base font-medium'
+                                                )}
+                                                type='button'
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                                </svg>
+                                                Salir
+                                            </button>
+                                        ) : ((centers.some((c) => c.userAdmin['id'] === user.id) && item.type === 3) ||
+                                            (item.type === 3 && user && user.roles.find((r) => r === "ROLE_SUPERADMIN"))) ? (
+                                            <a
+                                                key={item.name}
+                                                href={item.href}
+                                                className={classNames(
+                                                    item.current
+                                                        ? 'flex gap-1 text-white bg-logo-500'
+                                                        : 'flex gap-1 text-white hover:bg-hardpurple-300',
+                                                    'block px-3 py-2 rounded-md text-base font-medium'
+                                                )}
+                                                aria-current={item.current ? 'page' : undefined}
+                                            >
+                                                {item.icon}{item.name}
+                                            </a>
+                                        ) : ('')
                                     ))}
-                                    <button
-                                        onClick={() => logout()}
-                                        className="flex gap-1 px-3 py-2 rounded-md text-base font-semibold text-hardorange-300 hover:text-gray-400 hover:border-b-2 border-b-2 border-hardpurple-400 hover:border-hardorange-300"
-                                        type='button'
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                        </svg>
-                                        Salir
-                                    </button>
+
                                 </div>
 
                             </Disclosure.Panel>

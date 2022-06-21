@@ -15,7 +15,6 @@ export const EditInstallation = ({
     center,
     setInstallation
 }) => {
-
     const { editInstallation } = useInstallation();
     const { sports } = useSport();
     const { showMessageSucess } = FlagMessage()
@@ -40,7 +39,7 @@ export const EditInstallation = ({
                     ? true
                     : this.createError({
                         path: `${this.path}`,
-                        message: "Incorrect1",
+                        message: `Las hora de comienzo debe de ser mayor que la ultima hora de fin y la hora de fin mayor que la hora de comienzo`,
                     });
             } else {
                 const endAtCondition = item.startAt < item.endAt;
@@ -49,7 +48,7 @@ export const EditInstallation = ({
                     ? true
                     : this.createError({
                         path: `${this.path}`,
-                        message: "Incorrect2",
+                        message: `La hora de fin debe ser mayor que ${item.startAt}`,
                     });
             }
         })
@@ -96,6 +95,7 @@ export const EditInstallation = ({
             setInstallation(installation => ({ ...installation, sports: values.sports }));
             setInstallation(installation => ({ ...installation, schedule: values.schedule }));
             setInstallation(installation => ({ ...installation, pricePerRange: values.pricePerRange }));
+            setIsOpenEditInstallation(false);
             showMessageSucess("Datos guardados");
         },
     });
@@ -170,6 +170,10 @@ export const EditInstallation = ({
                                         id="pricePerRange"
                                         autoComplete="pricePerRange"
                                         className="outline-none py-3 px-4 block w-full shadow-sm rounded-md ring-1 ring-hardpurple-200 focus:ring-2 focus:ring-hardpurple-300"
+                                        onInput={(e) => {
+                                            const value = parseInt(e.target.value);
+                                            e.target.value = value ? value : null
+                                        }}
                                     />
                                     {formik.getFieldMeta("pricePerRange").error &&
                                         formik.getFieldMeta("pricePerRange").touched && (

@@ -7,6 +7,7 @@ import { FlagMessage } from "../commons/FlagMessage"
 import { UploadButton } from "react-uploader";
 import { Uploader } from "uploader";
 import { SearchIcon } from "@heroicons/react/solid";
+import { useRol } from "../../services/useRol";
 
 export const NewCenterModal = ({
     user,
@@ -17,6 +18,7 @@ export const NewCenterModal = ({
 }) => {
     const { showMessageSucess } = FlagMessage()
     const { createCenter } = useCenter();
+    const { addUserRolAdmin } = useRol();
     const [newImg, setNewImg] = useState([]);
 
     useEffect(() => {
@@ -67,6 +69,7 @@ export const NewCenterModal = ({
         validationSchema: validation,
         onSubmit: (values) => {
             createCenter(values);
+            addUserRolAdmin(userSelected.id)
             setIsOpenNewCenter(false);
             showMessageSucess("Centro creado");
         },

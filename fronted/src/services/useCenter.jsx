@@ -55,7 +55,6 @@ export const useCenter = () => {
         }).then(response => response.json()
             .then(async retrieved => {
                 center = await retrieved;
-                console.log(retrieved);
             }))
             .catch(error => console.error(error))
         return center;

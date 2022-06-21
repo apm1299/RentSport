@@ -3,6 +3,20 @@ import { useEvent } from '../../services/useEvent'
 
 export const EventContainer = () => {
     const { events } = useEvent();
+    const month = [
+        "enero",
+        "febrero",
+        "marzo",
+        "abril",
+        "mayo",
+        "junio",
+        "julio",
+        "agosto",
+        "septiembre",
+        "octubre",
+        "noviembre",
+        "diciembre",
+      ];
     return (
         <div id='events' className='w-ful' >
             {
@@ -18,7 +32,15 @@ export const EventContainer = () => {
                                     </div>
                                     <div className='flex-grow text-base mt-2'>
                                         <p>Deporte: {event.sport.name}</p>
-                                        <p>Dia: {event.date.substr(0, 9)}</p>
+                                        <p>Dia:  
+                                            {
+                                                isNaN(event.date.substr(5, 2)) ? (
+                                                    ` ${event.date.substr(7, 2)} de ${month[Number(event.date.substr(5, 1)) - 1]} del ${event.date.substr(0, 4)}`
+                                                ) : (
+                                                    ` ${event.date.substr(8, 2)} de ${month[Number(event.date.substr(5, 2)) - 1]} del ${event.date.substr(0, 4)}`
+                                                )
+                                            }
+                                        </p>
                                         <p>Intalacion {event.installation.name}</p>
                                     </div>
                                 </div>
